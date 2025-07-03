@@ -1,0 +1,3 @@
+com\mycompany\hospital\application\usecase\PacienteServiceImpl.class
+com\mycompany\hospital\adapters\gui\InicioPanel.class
+com\mycompany\hospital\infrastructure\postgresql\CitaMedicaRepositoryPostgres.class
