@@ -4,10 +4,18 @@
  */
 package com.mycompany.hospital.application.service;
 
+import com.mycompany.hospital.domain.model.CitaMedica;
+import java.util.List;
+
 /**
  *
  * @author Oscar M
  */
 public interface CitaMedicaService {
     
+    void crearCita(CitaMedica cita);
+    void actualizarCita(CitaMedica cita);
+    void eliminarCita(int id);
+    CitaMedica obtenerCitaPorId(int id);
+    List<CitaMedica> listarCitas();
 }

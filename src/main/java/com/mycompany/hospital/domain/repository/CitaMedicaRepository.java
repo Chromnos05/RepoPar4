@@ -10,8 +10,8 @@ import java.util.List;
 public interface CitaMedicaRepository {
     
     void guardar(CitaMedica cita);
-    CitaMedica buscarPorId(int id);
-    List<CitaMedica> listarTodos();
     void actualizar(CitaMedica cita);
     void eliminar(int id);
+    CitaMedica buscarPorId(int id);
+    List<CitaMedica> listarTodas();
 }
