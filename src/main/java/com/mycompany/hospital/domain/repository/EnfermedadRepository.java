@@ -11,7 +11,7 @@ public interface EnfermedadRepository {
     
     void guardar(Enfermedad enfermedad);
     Enfermedad buscarPorId(int id);
-    List<Enfermedad> listarTodos();
+    List<Enfermedad> listarTodas();
     void actualizar(Enfermedad enfermedad);
     void eliminar(int id);
 }

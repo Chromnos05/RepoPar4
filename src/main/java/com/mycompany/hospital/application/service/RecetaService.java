@@ -1,13 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.hospital.application.service;
 
-/**
- *
- * @author Oscar M
- */
+import com.mycompany.hospital.domain.model.Receta;
+import java.util.List;
+
 public interface RecetaService {
     
+    void crearReceta(Receta receta);
+    Receta obtenerRecetaPorId(int id);
+    List<Receta> listarRecetas();
+    void actualizarReceta(Receta receta);
+    void eliminarReceta(int id);
 }

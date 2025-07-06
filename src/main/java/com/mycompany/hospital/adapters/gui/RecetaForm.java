@@ -3,7 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.mycompany.hospital.adapters.gui;
+import com.mycompany.hospital.application.service.RecetaService;
+import com.mycompany.hospital.domain.model.Receta;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 /**
  *
  * @author Oscar M
@@ -13,8 +21,166 @@ public class RecetaForm extends javax.swing.JPanel {
     /**
      * Creates new form RecetaForm
      */
-    public RecetaForm() {
-        initComponents();
+    private final RecetaService recetaService;
+    private final CardLayout cardLayout;
+    private final JPanel contentPanel;
+
+    private JTable table;
+    private DefaultTableModel tableModel;
+    private JTextField txtIdDiagnostico, txtFecha;
+
+    public RecetaForm(RecetaService recetaService, CardLayout cardLayout, JPanel contentPanel) {
+        this.recetaService = recetaService;
+        this.cardLayout = cardLayout;
+        this.contentPanel = contentPanel;
+        initUI();
+    }
+
+    private void initUI() {
+        setLayout(new BorderLayout(0, 20));
+        setBackground(new Color(245, 248, 250));
+        setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
+
+        JLabel titulo = new JLabel("Gestión de Recetas");
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        titulo.setForeground(new Color(44, 62, 80));
+
+        JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        formPanel.setOpaque(false);
+
+        txtIdDiagnostico = new JTextField();
+        txtFecha = new JTextField();
+
+        formPanel.add(new JLabel("ID Diagnóstico:"));
+        formPanel.add(txtIdDiagnostico);
+        formPanel.add(new JLabel("Fecha (YYYY-MM-DD):"));
+        formPanel.add(txtFecha);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        buttonPanel.setOpaque(false);
+        JButton btnGuardar = crearBoton("Guardar");
+        JButton btnModificar = crearBoton("Modificar");
+        JButton btnEliminar = crearBoton("Eliminar");
+        JButton btnCargar = crearBoton("Cargar");
+        JButton btnVolver = crearBoton("Volver al inicio");
+
+        buttonPanel.add(btnGuardar);
+        buttonPanel.add(btnModificar);
+        buttonPanel.add(btnEliminar);
+        buttonPanel.add(btnCargar);
+        buttonPanel.add(btnVolver);
+
+        JPanel topPanel = new JPanel(new BorderLayout(0, 10));
+        topPanel.setOpaque(false);
+        topPanel.add(titulo, BorderLayout.NORTH);
+        topPanel.add(formPanel, BorderLayout.CENTER);
+        topPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        tableModel = new DefaultTableModel(new String[]{"ID", "ID Diagnóstico", "Fecha"}, 0);
+        table = new JTable(tableModel);
+        table.setRowHeight(22);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        add(topPanel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // --- Action Listeners ---
+        btnGuardar.addActionListener(e -> guardarReceta());
+        btnModificar.addActionListener(e -> modificarReceta());
+        btnEliminar.addActionListener(e -> eliminarReceta());
+        btnCargar.addActionListener(e -> cargarRecetas());
+        btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
+
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
+                int fila = table.getSelectedRow();
+                txtIdDiagnostico.setText(tableModel.getValueAt(fila, 1).toString());
+                txtFecha.setText(tableModel.getValueAt(fila, 2).toString());
+            }
+        });
+    }
+
+    private JButton crearBoton(String texto) {
+        JButton btn = new JButton(texto);
+        btn.setFocusPainted(false);
+        btn.setBackground(new Color(52, 73, 94));
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        btn.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+        return btn;
+    }
+
+    private void guardarReceta() {
+        try {
+            int idDiagnostico = Integer.parseInt(txtIdDiagnostico.getText());
+            LocalDate fecha = LocalDate.parse(txtFecha.getText());
+
+            Receta receta = new Receta(0, idDiagnostico, fecha);
+            recetaService.crearReceta(receta);
+            cargarRecetas();
+            limpiarCampos();
+            JOptionPane.showMessageDialog(this, "Receta guardada.");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "ID de Diagnóstico debe ser un número.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto. Use YYYY-MM-DD.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void modificarReceta() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            try {
+                int id = (int) tableModel.getValueAt(selectedRow, 0);
+                int idDiagnostico = Integer.parseInt(txtIdDiagnostico.getText());
+                LocalDate fecha = LocalDate.parse(txtFecha.getText());
+
+                Receta receta = new Receta(id, idDiagnostico, fecha);
+                recetaService.actualizarReceta(receta);
+                cargarRecetas();
+                limpiarCampos();
+                JOptionPane.showMessageDialog(this, "Receta modificada.");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "ID de Diagnóstico debe ser un número.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto. Use YYYY-MM-DD.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al modificar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una receta para modificar.");
+        }
+    }
+
+    private void eliminarReceta() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            int id = (int) tableModel.getValueAt(selectedRow, 0);
+            int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro?", "Confirmación", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                recetaService.eliminarReceta(id);
+                cargarRecetas();
+                limpiarCampos();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una receta para eliminar.");
+        }
+    }
+
+    private void cargarRecetas() {
+        tableModel.setRowCount(0);
+        List<Receta> recetas = recetaService.listarRecetas();
+        for (Receta r : recetas) {
+            tableModel.addRow(new Object[]{r.getId(), r.getIdDiagnostico(), r.getFecha().toString()});
+        }
+    }
+
+    private void limpiarCampos() {
+        txtIdDiagnostico.setText("");
+        txtFecha.setText("");
+        table.clearSelection();
     }
 
     /**

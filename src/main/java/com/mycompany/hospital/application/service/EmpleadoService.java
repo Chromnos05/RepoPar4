@@ -4,10 +4,17 @@
  */
 package com.mycompany.hospital.application.service;
 
+import com.mycompany.hospital.domain.model.Empleado;
+import java.util.List;
+
 /**
  *
  * @author Oscar M
  */
 public interface EmpleadoService {
-    
+    void crearEmpleado(Empleado empleado);
+    Empleado obtenerEmpleadoPorId(int id);
+    List<Empleado> listarEmpleados();
+    void actualizarEmpleado(Empleado empleado);
+    void eliminarEmpleado(int id);
 }

@@ -1,13 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.hospital.application.service;
 
-/**
- *
- * @author Oscar M
- */
+import com.mycompany.hospital.domain.model.Enfermedad;
+import java.util.List;
+
 public interface EnfermedadService {
     
+    void crearEnfermedad(Enfermedad enfermedad);
+    Enfermedad obtenerEnfermedadPorId(int id);
+    List<Enfermedad> listarEnfermedades();
+    void actualizarEnfermedad(Enfermedad enfermedad);
+    void eliminarEnfermedad(int id);
 }
