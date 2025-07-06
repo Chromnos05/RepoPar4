@@ -33,6 +33,26 @@ import com.mycompany.hospital.domain.repository.EnfermedadRepository;
 import com.mycompany.hospital.infrastructure.postgresql.EnfermedadRepositoryPostgres;
 // --- Fin imports para Enfermedad ---
 
+import com.mycompany.hospital.adapters.gui.MedicoForm;
+import com.mycompany.hospital.adapters.gui.CitaMedicaForm;
+import com.mycompany.hospital.adapters.gui.DiagnosticoForm;
+
+import com.mycompany.hospital.application.service.MedicoService;
+import com.mycompany.hospital.application.usecase.MedicoServiceImpl;
+import com.mycompany.hospital.domain.repository.MedicoRepository;
+import com.mycompany.hospital.infrastructure.postgresql.MedicoRepositoryPostgres;
+
+import com.mycompany.hospital.application.service.CitaMedicaService;
+import com.mycompany.hospital.application.usecase.CitaMedicaServiceImpl;
+import com.mycompany.hospital.domain.repository.CitaMedicaRepository;
+import com.mycompany.hospital.infrastructure.postgresql.CitaMedicaRepositoryPostgres;
+
+import com.mycompany.hospital.application.service.DiagnosticoService;
+import com.mycompany.hospital.application.usecase.DiagnosticoServiceImpl;
+import com.mycompany.hospital.domain.repository.DiagnosticoRepository;
+import com.mycompany.hospital.infrastructure.postgresql.DiagnosticoRepositoryPostgres;
+
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -47,6 +67,9 @@ public class Main extends javax.swing.JFrame {
     private final MedicamentoForm medicamentoForm;
     private final RecetaForm recetaForm;
     private final EnfermedadForm enfermedadForm; // NUEVO
+    private final MedicoForm medicoForm;
+    private final CitaMedicaForm citaForm;
+    private final DiagnosticoForm diagnosticoForm;
 
     public Main() {
         // --- Servicios ---
@@ -71,6 +94,18 @@ public class Main extends javax.swing.JFrame {
         EnfermedadService enfermedadService = new EnfermedadServiceImpl(enfermedadRepo);
         enfermedadForm = new EnfermedadForm(enfermedadService, cardLayout, contentPanel);
         // --- Fin Servicio Enfermedad ---
+        
+        MedicoRepository medicoRepo = new MedicoRepositoryPostgres();
+        MedicoService medicoService = new MedicoServiceImpl(medicoRepo);
+        medicoForm = new MedicoForm(medicoService, cardLayout, contentPanel);
+
+        CitaMedicaRepository citaRepo = new CitaMedicaRepositoryPostgres();
+        CitaMedicaService citaService = new CitaMedicaServiceImpl(citaRepo);
+        citaForm = new CitaMedicaForm(citaService, cardLayout, contentPanel);
+
+        DiagnosticoRepository diagnosticoRepo = new DiagnosticoRepositoryPostgres();
+        DiagnosticoService diagnosticoService = new DiagnosticoServiceImpl(diagnosticoRepo);
+        diagnosticoForm = new DiagnosticoForm(diagnosticoService, cardLayout, contentPanel);
 
         initUI();
     }
@@ -94,15 +129,19 @@ public class Main extends javax.swing.JFrame {
         JButton btnMedicamentos = crearBotonMenu("Medicamentos");
         JButton btnRecetas = crearBotonMenu("Recetas");
         JButton btnEnfermedades = crearBotonMenu("Enfermedades"); // NUEVO
+        JButton btnCita = crearBotonMenu("Citas Médicas");
+        JButton btnDiagnostico = crearBotonMenu("Diagnósticos");
         JButton btnSalir = crearBotonMenu("Salir");
 
         // --- Action Listeners ---
         btnPacientes.addActionListener(e -> mostrarPanel("pacientes"));
-        btnMedicos.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo de médicos no disponible aún"));
+        btnMedicos.addActionListener(e -> cardLayout.show(contentPanel, "medico"));
         btnEmpleados.addActionListener(e -> mostrarPanel("empleados"));
         btnMedicamentos.addActionListener(e -> mostrarPanel("medicamentos"));
         btnRecetas.addActionListener(e -> mostrarPanel("recetas"));
         btnEnfermedades.addActionListener(e -> mostrarPanel("enfermedades")); // NUEVO
+        btnCita.addActionListener(e -> cardLayout.show(contentPanel, "cita"));
+        btnDiagnostico.addActionListener(e -> cardLayout.show(contentPanel, "diagnostico"));
         btnSalir.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(this, "¿Deseas salir?", "Confirmación", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) System.exit(0);
@@ -121,6 +160,10 @@ public class Main extends javax.swing.JFrame {
         menuPanel.add(btnRecetas);
         menuPanel.add(Box.createVerticalStrut(10));
         menuPanel.add(btnEnfermedades); // NUEVO
+        menuPanel.add(Box.createVerticalStrut(10));
+        menuPanel.add(btnCita);
+        menuPanel.add(Box.createVerticalStrut(10));
+        menuPanel.add(btnDiagnostico);
         menuPanel.add(Box.createVerticalGlue());
         menuPanel.add(btnSalir);
         menuPanel.add(Box.createVerticalStrut(20));
@@ -132,6 +175,9 @@ public class Main extends javax.swing.JFrame {
         contentPanel.add(medicamentoForm, "medicamentos");
         contentPanel.add(recetaForm, "recetas");
         contentPanel.add(enfermedadForm, "enfermedades"); // NUEVO
+        contentPanel.add(medicoForm, "medico");
+        contentPanel.add(citaForm, "cita");
+        contentPanel.add(diagnosticoForm, "diagnostico");
 
         add(menuPanel, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);

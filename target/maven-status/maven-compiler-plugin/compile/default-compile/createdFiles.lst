@@ -1,6 +1,8 @@
+com\mycompany\hospital\application\usecase\DiagnosticoServiceImpl.class
 com\mycompany\hospital\application\usecase\EnfermedadServiceImpl.class
 com\mycompany\hospital\application\service\SintomaService.class
 com\mycompany\hospital\domain\model\Contraindicacion.class
+com\mycompany\hospital\application\usecase\CitaMedicaServiceImpl.class
 com\mycompany\hospital\infrastructure\postgresql\ConsultorioRepositoryPostgres.class
 com\mycompany\hospital\domain\repository\RecetaRepository.class
 com\mycompany\hospital\application\service\EnfermedadService.class
@@ -94,6 +96,7 @@ com\mycompany\hospital\adapters\gui\PrincipioActivoForm.class
 com\mycompany\hospital\application\service\CitaMedicaService.class
 com\mycompany\hospital\domain\repository\SustitucionRepository.class
 com\mycompany\hospital\application\service\RecetaService.class
+com\mycompany\hospital\application\usecase\MedicoServiceImpl.class
 com\mycompany\hospital\adapters\gui\HorarioConsultaForm.class
 com\mycompany\hospital\domain\repository\SintomaRepository.class
 com\mycompany\hospital\adapters\gui\MedicamentoRecetaForm.class

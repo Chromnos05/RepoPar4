@@ -35,13 +35,13 @@ public class PacienteForm extends javax.swing.JPanel {
         setBackground(new Color(245, 248, 250));
         setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40)); // espacio interno amplio
 
-        // 🔹 Título
+        //Título
         JLabel titulo = new JLabel("Gestión de Pacientes");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titulo.setForeground(new Color(44, 62, 80));
         titulo.setHorizontalAlignment(SwingConstants.LEFT);
 
-        // 🔹 Panel de formulario
+        //Panel de formulario
         JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
         formPanel.setOpaque(false); // sin fondo para integrarse
 
@@ -59,7 +59,7 @@ public class PacienteForm extends javax.swing.JPanel {
         formPanel.add(new JLabel("ID Médico Asignado:"));
         formPanel.add(txtIdMedico);
 
-        // 🔹 Panel de botones
+        //Panel de botones
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         buttonPanel.setOpaque(false);
 
@@ -81,7 +81,7 @@ public class PacienteForm extends javax.swing.JPanel {
         buttonPanel.add(btnCargar);
         buttonPanel.add(btnVolver);
 
-        // 🔹 Tabla
+        //Tabla
         tableModel = new DefaultTableModel(new String[]{"ID", "Nombre", "Fecha Nac.", "Dirección", "Médico"}, 0);
         table = new JTable(tableModel);
         table.setRowHeight(22);
@@ -95,7 +95,7 @@ public class PacienteForm extends javax.swing.JPanel {
         scrollPane.setBorder(BorderFactory.createTitledBorder("Pacientes registrados"));
         scrollPane.setPreferredSize(new Dimension(750, 200));
 
-        // 🔹 Evento de selección de tabla
+        //Evento de selección de tabla
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
                 int fila = table.getSelectedRow();
@@ -107,7 +107,7 @@ public class PacienteForm extends javax.swing.JPanel {
             }
         });
 
-        // 🔹 Ensamblar todo
+        //Ensamblar todo
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         topPanel.setOpaque(false);

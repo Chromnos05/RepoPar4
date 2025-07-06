@@ -39,9 +39,12 @@ C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\app
 C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\service\SintomaService.java
 C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\service\SustitucionService.java
 C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\service\VacacionService.java
+C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\usecase\CitaMedicaServiceImpl.java
+C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\usecase\DiagnosticoServiceImpl.java
 C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\usecase\EmpleadoServiceImpl.java
 C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\usecase\EnfermedadServiceImpl.java
 C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\usecase\MedicamentoServiceImpl.java
+C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\usecase\MedicoServiceImpl.java
 C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\usecase\PacienteServiceImpl.java
 C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\application\usecase\RecetaServiceImpl.java
 C:\Users\oscar\Desktop\parcial\RepoPar4\src\main\java\com\mycompany\hospital\domain\model\CitaMedica.java
