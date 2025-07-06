@@ -1,8 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.hospital.application.service;
+
+import com.mycompany.hospital.domain.model.Diagnostico;
+import java.util.List;
 
 /**
  *
@@ -10,4 +9,9 @@ package com.mycompany.hospital.application.service;
  */
 public interface DiagnosticoService {
     
+    void crearDiagnostico(Diagnostico diagnostico);
+    void actualizarDiagnostico(Diagnostico diagnostico);
+    void eliminarDiagnostico(int id);
+    Diagnostico obtenerDiagnosticoPorId(int id);
+    List<Diagnostico> listarDiagnosticos();
 }

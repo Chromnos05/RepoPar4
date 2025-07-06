@@ -10,8 +10,8 @@ import java.util.List;
 public interface DiagnosticoRepository {
     
     void guardar(Diagnostico diagnostico);
-    Diagnostico buscarPorId(int id);
-    List<Diagnostico> listarTodos();
     void actualizar(Diagnostico diagnostico);
     void eliminar(int id);
+    Diagnostico buscarPorId(int id);
+    List<Diagnostico> listarTodos();
 }
