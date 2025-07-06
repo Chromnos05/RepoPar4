@@ -143,8 +143,28 @@ public class Main extends javax.swing.JFrame {
         btnCita.addActionListener(e -> cardLayout.show(contentPanel, "cita"));
         btnDiagnostico.addActionListener(e -> cardLayout.show(contentPanel, "diagnostico"));
         btnSalir.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(this, "¿Deseas salir?", "Confirmación", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+            UIManager.put("OptionPane.yesButtonText", "Sí");
+            UIManager.put("OptionPane.noButtonText", "No");
+
+            ImageIcon icono = new ImageIcon("src/main/resources/iconos/salir.png");
+            Image imagen = icono.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+            ImageIcon iconoRedimensionado = new ImageIcon(imagen);
+            JLabel mensaje = new JLabel("¿Deseas salir?");
+            mensaje.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            mensaje.setIcon(iconoRedimensionado);
+            mensaje.setIconTextGap(15);
+            mensaje.setHorizontalAlignment(SwingConstants.CENTER);
+
+            int confirmacion = JOptionPane.showConfirmDialog(
+                null,
+                mensaje,
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+            );
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
         });
 
         // --- Añadir botones al panel ---
