@@ -6,6 +6,7 @@ import com.mycompany.hospital.domain.repository.CitaMedicaRepository;
 import java.time.LocalDate;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -58,5 +59,10 @@ public class CitaMedicaServiceImpl implements CitaMedicaService {
                 .filter(h -> !ocupadas.contains(h))
                 .toList();
     }
-}
+    
+    @Override
+    public Optional<CitaMedica> obtenerInfoPorId(int idCita) {
+        return repository.buscarInfoPorId(idCita);
+    }
 
+}

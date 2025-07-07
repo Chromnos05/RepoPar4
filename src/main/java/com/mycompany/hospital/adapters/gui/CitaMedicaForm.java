@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 /**
  *
  * @author Oscar M
@@ -65,6 +66,7 @@ public class CitaMedicaForm extends javax.swing.JPanel {
         JButton btnCargar = crearBoton("Cargar");
         JButton btnHoy = crearBoton("Citas de hoy");
         JButton btnDisponibilidad = crearBoton("Ver disponibilidad");
+        JButton btnBuscarCita = crearBoton("Buscar cita por ID");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarCita());
@@ -73,6 +75,7 @@ public class CitaMedicaForm extends javax.swing.JPanel {
         btnCargar.addActionListener(e -> cargarCitas());
         btnHoy.addActionListener(e -> cargarCitasDeHoy());
         btnDisponibilidad.addActionListener(e -> mostrarDisponibilidad());
+        btnBuscarCita.addActionListener(e -> buscarCitaInfoPorId());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
@@ -81,6 +84,7 @@ public class CitaMedicaForm extends javax.swing.JPanel {
         buttonPanel.add(btnCargar);
         buttonPanel.add(btnHoy);
         buttonPanel.add(btnDisponibilidad);
+        buttonPanel.add(btnBuscarCita);
         buttonPanel.add(btnVolver);
 
         tableModel = new DefaultTableModel(new String[]{"ID", "ID Paciente", "ID Médico", "Fecha", "Hora"}, 0);
@@ -235,6 +239,34 @@ public class CitaMedicaForm extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Entrada inválida o error interno.");
         }
     }
+    
+    private void buscarCitaInfoPorId() {
+        String input = JOptionPane.showInputDialog(this, "Ingrese el ID de la cita médica:");
+        if (input != null && !input.isEmpty()) {
+            try {
+                int idCita = Integer.parseInt(input);
+                Optional<CitaMedica> resultado = citaService.obtenerInfoPorId(idCita);
+
+                if (resultado.isPresent()) {
+                    CitaMedica c = resultado.get();
+                    StringBuilder mensaje = new StringBuilder();
+                    mensaje.append("ID Cita: ").append(c.getId()).append("\n");
+                    mensaje.append("ID Paciente: ").append(c.getIdPaciente()).append("\n");
+                    mensaje.append("ID Médico: ").append(c.getIdMedico()).append("\n");
+                    mensaje.append("Fecha: ").append(c.getFecha()).append("\n");
+                    mensaje.append("Hora: ").append(c.getHora());
+
+                    JOptionPane.showMessageDialog(this, mensaje.toString(), "Cita encontrada", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró ninguna cita con ese ID.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+                }
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "ID inválido", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

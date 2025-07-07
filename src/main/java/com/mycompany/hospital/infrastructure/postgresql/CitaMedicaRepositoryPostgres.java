@@ -7,6 +7,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -138,5 +139,28 @@ public class CitaMedicaRepositoryPostgres implements CitaMedicaRepository {
         }
         return horasOcupadas;
     }
+    
+    @Override
+    public Optional<CitaMedica> buscarInfoPorId(int idCita) {
+        String sql = "SELECT * FROM citamedica WHERE id_cita = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idCita);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                CitaMedica cita = new CitaMedica(
+                    rs.getInt("id_cita"),
+                    rs.getInt("id_paciente"),
+                    rs.getInt("id_medico"),
+                    rs.getDate("fecha").toLocalDate(),
+                    rs.getString("hora")
+                );
+                return Optional.of(cita);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
 
 }
