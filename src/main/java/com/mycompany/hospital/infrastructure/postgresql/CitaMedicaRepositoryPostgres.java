@@ -96,4 +96,25 @@ public class CitaMedicaRepositoryPostgres implements CitaMedicaRepository {
         }
         return lista;
     }
+    
+    @Override
+    public List<CitaMedica> buscarCitasDeHoy() {
+        List<CitaMedica> lista = new ArrayList<>();
+        String sql = "SELECT * FROM \"citamedica\" WHERE fecha = CURRENT_DATE";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new CitaMedica(
+                    rs.getInt("id_cita"),
+                    rs.getInt("id_paciente"),
+                    rs.getInt("id_medico"),
+                    rs.getDate("fecha").toLocalDate(),
+                    rs.getString("hora")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }

@@ -14,4 +14,6 @@ public interface CitaMedicaRepository {
     void eliminar(int id);
     CitaMedica buscarPorId(int id);
     List<CitaMedica> listarTodas();
+    
+    List<CitaMedica> buscarCitasDeHoy();
 }

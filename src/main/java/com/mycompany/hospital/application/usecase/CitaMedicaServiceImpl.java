@@ -43,5 +43,10 @@ public class CitaMedicaServiceImpl implements CitaMedicaService {
     public List<CitaMedica> listarCitas() {
         return repository.listarTodas();
     }
+    
+    @Override
+    public List<CitaMedica> obtenerCitasDeHoy() {
+        return repository.buscarCitasDeHoy();
+    }
 }
 

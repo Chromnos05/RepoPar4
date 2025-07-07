@@ -63,18 +63,21 @@ public class CitaMedicaForm extends javax.swing.JPanel {
         JButton btnModificar = crearBoton("Modificar");
         JButton btnEliminar = crearBoton("Eliminar");
         JButton btnCargar = crearBoton("Cargar");
+        JButton btnHoy = crearBoton("Citas de hoy");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarCita());
         btnModificar.addActionListener(e -> modificarCita());
         btnEliminar.addActionListener(e -> eliminarCita());
         btnCargar.addActionListener(e -> cargarCitas());
+        btnHoy.addActionListener(e -> cargarCitasDeHoy());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
         buttonPanel.add(btnModificar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
+        buttonPanel.add(btnHoy);
         buttonPanel.add(btnVolver);
 
         tableModel = new DefaultTableModel(new String[]{"ID", "ID Paciente", "ID Médico", "Fecha", "Hora"}, 0);
@@ -174,6 +177,20 @@ public class CitaMedicaForm extends javax.swing.JPanel {
     private void cargarCitas() {
         tableModel.setRowCount(0);
         List<CitaMedica> lista = citaService.listarCitas();
+        for (CitaMedica c : lista) {
+            tableModel.addRow(new Object[]{
+                c.getId(),
+                c.getIdPaciente(),
+                c.getIdMedico(),
+                c.getFecha(),
+                c.getHora()
+            });
+        }
+    }
+    
+    private void cargarCitasDeHoy() {
+        tableModel.setRowCount(0);
+        List<CitaMedica> lista = citaService.obtenerCitasDeHoy();
         for (CitaMedica c : lista) {
             tableModel.addRow(new Object[]{
                 c.getId(),

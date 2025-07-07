@@ -18,4 +18,6 @@ public interface CitaMedicaService {
     void eliminarCita(int id);
     CitaMedica obtenerCitaPorId(int id);
     List<CitaMedica> listarCitas();
+    
+    List<CitaMedica> obtenerCitasDeHoy();
 }
