@@ -118,4 +118,28 @@ public class MedicoRepositoryPostgres implements MedicoRepository {
 
         return resultados;
     }
+    
+    @Override
+    public List<Medico> buscarPorEspecialidad(String especialidad) {
+        List<Medico> lista = new ArrayList<>();
+        String sql = "SELECT * FROM medico WHERE LOWER(especialidad) = LOWER(?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, especialidad);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Medico(
+                    rs.getInt("id_medico"),
+                    rs.getString("nombre"),
+                    rs.getString("especialidad"),
+                    rs.getInt("id_consultorio")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
 }

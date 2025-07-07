@@ -19,4 +19,6 @@ public interface MedicoService {
     Medico obtenerMedicoPorId(int id);
     List<Medico> listarMedicos();
     List<Object[]> obtenerPacientesPorMedicoUltimoAnio();   
+    List<Medico> obtenerPorEspecialidad(String especialidad);
+
 }

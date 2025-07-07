@@ -49,4 +49,9 @@ public class MedicoServiceImpl implements MedicoService {
         return medicoRepository.obtenerPacientesPorMedicoUltimoAnio();
     }
 
+    @Override
+    public List<Medico> obtenerPorEspecialidad(String especialidad) {
+        return medicoRepository.buscarPorEspecialidad(especialidad);
+    }
+
 }

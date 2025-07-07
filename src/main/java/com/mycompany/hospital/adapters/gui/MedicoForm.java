@@ -68,6 +68,7 @@ public class MedicoForm extends javax.swing.JPanel {
         JButton btnCargar = crearBoton("Cargar");
         JButton btnSustituciones = crearBoton("Ver sustituciones");
         JButton btnAtenciones = crearBoton("Pacientes por médico (último año)");
+        JButton btnPorEspecialidad = crearBoton("Buscar por especialidad");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarMedico());
@@ -76,6 +77,7 @@ public class MedicoForm extends javax.swing.JPanel {
         btnCargar.addActionListener(e -> cargarMedicos());
         btnSustituciones.addActionListener(e -> mostrarSustituciones());
         btnAtenciones.addActionListener(e -> mostrarPacientesPorMedicoUltimoAnio());
+        btnPorEspecialidad.addActionListener(e -> buscarMedicosPorEspecialidad());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
@@ -84,6 +86,7 @@ public class MedicoForm extends javax.swing.JPanel {
         buttonPanel.add(btnCargar);
         buttonPanel.add(btnSustituciones);
         buttonPanel.add(btnAtenciones);
+        buttonPanel.add(btnPorEspecialidad);
         buttonPanel.add(btnVolver);
 
         // Tabla
@@ -254,6 +257,35 @@ public class MedicoForm extends javax.swing.JPanel {
 
         JOptionPane.showMessageDialog(this, scroll, "Pacientes atendidos por médico", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    private void buscarMedicosPorEspecialidad() {
+        String input = JOptionPane.showInputDialog(this, "Ingrese la especialidad a buscar:");
+        if (input != null && !input.isEmpty()) {
+            List<Medico> lista = medicoService.obtenerPorEspecialidad(input);
+            if (lista.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay médicos con esa especialidad.");
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder("Médicos con especialidad '" + input + "':\n\n");
+            for (Medico m : lista) {
+                sb.append("*ID: ").append(m.getId())
+                  .append(" | Nombre: ").append(m.getNombre())
+                  .append(" | Consultorio: ").append(m.getIdConsultorio()).append("\n");
+            }
+
+            JTextArea area = new JTextArea(sb.toString());
+            area.setEditable(false);
+            area.setBackground(new Color(245, 245, 245));
+            area.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+            area.setMargin(new Insets(10, 10, 10, 10));
+            JScrollPane scroll = new JScrollPane(area);
+            scroll.setPreferredSize(new Dimension(500, 300));
+
+            JOptionPane.showMessageDialog(this, scroll, "Especialidad: " + input, JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

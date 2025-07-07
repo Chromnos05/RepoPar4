@@ -16,4 +16,6 @@ public interface MedicoRepository {
     void eliminar(int id);
     
     List<Object[]> obtenerPacientesPorMedicoUltimoAnio();
+    List<Medico> buscarPorEspecialidad(String especialidad);
+
 }
