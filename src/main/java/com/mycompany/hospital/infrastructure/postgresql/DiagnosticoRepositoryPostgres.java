@@ -91,4 +91,29 @@ public class DiagnosticoRepositoryPostgres implements DiagnosticoRepository {
         }
         return lista;
     }
+    
+    @Override
+    public List<Diagnostico> buscarPorIdPaciente(int idPaciente) {
+        List<Diagnostico> lista = new ArrayList<>();
+        String sql = """
+            SELECT d.* FROM "diagnostico" d
+            INNER JOIN "citamedica" c ON d.id_cita = c.id_cita
+            WHERE c.id_paciente = ?
+        """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idPaciente);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Diagnostico(
+                    rs.getInt("id_diagnostico"),
+                    rs.getInt("id_cita"),
+                    rs.getInt("id_enfermedad"),
+                    rs.getString("observaciones")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }

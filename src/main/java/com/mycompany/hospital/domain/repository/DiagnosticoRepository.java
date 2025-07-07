@@ -14,4 +14,6 @@ public interface DiagnosticoRepository {
     void eliminar(int id);
     Diagnostico buscarPorId(int id);
     List<Diagnostico> listarTodos();
+    
+    List<Diagnostico> buscarPorIdPaciente(int idPaciente);
 }

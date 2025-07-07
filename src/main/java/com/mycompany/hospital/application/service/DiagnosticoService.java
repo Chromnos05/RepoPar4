@@ -14,4 +14,6 @@ public interface DiagnosticoService {
     void eliminarDiagnostico(int id);
     Diagnostico obtenerDiagnosticoPorId(int id);
     List<Diagnostico> listarDiagnosticos();
+    
+    List<Diagnostico> obtenerPorIdPaciente(int idPaciente);
 }

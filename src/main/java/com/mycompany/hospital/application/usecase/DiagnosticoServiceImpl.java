@@ -43,5 +43,10 @@ public class DiagnosticoServiceImpl implements DiagnosticoService {
     public List<Diagnostico> listarDiagnosticos() {
         return repository.listarTodos();
     }
+    
+    @Override
+    public List<Diagnostico> obtenerPorIdPaciente(int idPaciente) {
+        return repository.buscarPorIdPaciente(idPaciente);
+    }
 }
 
