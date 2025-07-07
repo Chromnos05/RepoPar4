@@ -54,5 +54,10 @@ public class DiagnosticoServiceImpl implements DiagnosticoService {
     public List<Diagnostico> obtenerPorRangoDeFechas(LocalDate desde, LocalDate hasta) {
         return repository.buscarPorRangoDeFechas(desde, hasta);
     }
+    
+    @Override
+    public List<Diagnostico> obtenerPorMedicoYFecha(int idMedico, LocalDate fecha) {
+        return repository.buscarPorMedicoYFecha(idMedico, fecha);
+    }
 }
 

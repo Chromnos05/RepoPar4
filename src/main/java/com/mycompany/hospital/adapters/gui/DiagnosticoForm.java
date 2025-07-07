@@ -63,6 +63,7 @@ public class DiagnosticoForm extends javax.swing.JPanel {
         JButton btnCargar = crearBoton("Cargar");
         JButton btnHistorialPaciente = crearBoton("Historial por paciente");
         JButton btnDiagnosticosPorFecha = crearBoton("Diagnósticos por fecha");
+        JButton btnBuscarPorMedicoFecha = crearBoton("Diagnósticos por médico y fecha");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarDiagnostico());
@@ -71,6 +72,7 @@ public class DiagnosticoForm extends javax.swing.JPanel {
         btnCargar.addActionListener(e -> cargarDiagnosticos());
         btnHistorialPaciente.addActionListener(e -> buscarPorPaciente());
         btnDiagnosticosPorFecha.addActionListener(e -> buscarDiagnosticosPorFecha());
+        btnBuscarPorMedicoFecha.addActionListener(e -> buscarDiagnosticosPorMedicoYFecha());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
@@ -79,6 +81,7 @@ public class DiagnosticoForm extends javax.swing.JPanel {
         buttonPanel.add(btnCargar);
         buttonPanel.add(btnHistorialPaciente);
         buttonPanel.add(btnDiagnosticosPorFecha);
+        buttonPanel.add(btnBuscarPorMedicoFecha);
         buttonPanel.add(btnVolver);
 
         tableModel = new DefaultTableModel(new String[]{"ID", "ID Cita", "ID Enfermedad", "Observaciones"}, 0);
@@ -230,6 +233,46 @@ public class DiagnosticoForm extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Fechas inválidas.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    private void buscarDiagnosticosPorMedicoYFecha() {
+        try {
+            String idStr = JOptionPane.showInputDialog(this, "Ingrese el ID del médico:");
+            String fechaStr = JOptionPane.showInputDialog(this, "Ingrese la fecha (yyyy-MM-dd):");
+
+            if (idStr != null && fechaStr != null) {
+                int idMedico = Integer.parseInt(idStr);
+                LocalDate fecha = LocalDate.parse(fechaStr);
+
+                List<Diagnostico> lista = diagnosticoService.obtenerPorMedicoYFecha(idMedico, fecha);
+
+                if (lista.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No se encontraron diagnósticos.");
+                    return;
+                }
+
+                StringBuilder mensaje = new StringBuilder("🩺 Diagnósticos del médico " + idMedico + " en " + fecha + ":\n\n");
+                for (Diagnostico d : lista) {
+                    mensaje.append("• ID: ").append(d.getId())
+                           .append(" | Cita: ").append(d.getIdCita())
+                           .append(" | Enfermedad: ").append(d.getIdEnfermedad())
+                           .append(" | Obs: ").append(d.getObservaciones()).append("\n");
+                }
+
+                JTextArea area = new JTextArea(mensaje.toString());
+                area.setEditable(false);
+                area.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+                area.setBackground(new Color(245, 245, 245));
+                area.setMargin(new Insets(8, 8, 8, 8));
+                JScrollPane scroll = new JScrollPane(area);
+                scroll.setPreferredSize(new Dimension(500, 300));
+
+                JOptionPane.showMessageDialog(this, scroll, "Diagnósticos encontrados", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Entrada inválida o error.");
+        }
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

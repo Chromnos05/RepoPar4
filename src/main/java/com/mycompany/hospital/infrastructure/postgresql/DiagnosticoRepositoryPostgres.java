@@ -143,5 +143,34 @@ public class DiagnosticoRepositoryPostgres implements DiagnosticoRepository {
         }
         return lista;
     }
+    
+    @Override
+    public List<Diagnostico> buscarPorMedicoYFecha(int idMedico, LocalDate fecha) {
+        List<Diagnostico> lista = new ArrayList<>();
+        String sql = """
+            SELECT d.*
+            FROM diagnostico d
+            JOIN citamedica c ON d.id_cita = c.id_cita
+            WHERE c.id_medico = ? AND c.fecha = ?
+        """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idMedico);
+            stmt.setDate(2, Date.valueOf(fecha));
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Diagnostico(
+                    rs.getInt("id_diagnostico"),
+                    rs.getInt("id_cita"),
+                    rs.getInt("id_enfermedad"),
+                    rs.getString("observaciones")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
 
 }

@@ -18,5 +18,6 @@ public interface DiagnosticoService {
     
     List<Diagnostico> obtenerPorIdPaciente(int idPaciente);
     List<Diagnostico> obtenerPorRangoDeFechas(LocalDate desde, LocalDate hasta);
+    List<Diagnostico> obtenerPorMedicoYFecha(int idMedico, LocalDate fecha);
 
 }

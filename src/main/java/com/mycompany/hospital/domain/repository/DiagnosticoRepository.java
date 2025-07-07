@@ -18,4 +18,5 @@ public interface DiagnosticoRepository {
     
     List<Diagnostico> buscarPorIdPaciente(int idPaciente);
     List<Diagnostico> buscarPorRangoDeFechas(LocalDate desde, LocalDate hasta);
+    List<Diagnostico> buscarPorMedicoYFecha(int idMedico, LocalDate fecha);
 }
