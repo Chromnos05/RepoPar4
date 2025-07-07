@@ -5,6 +5,7 @@
 package com.mycompany.hospital.application.service;
 
 import com.mycompany.hospital.domain.model.CitaMedica;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -20,4 +21,5 @@ public interface CitaMedicaService {
     List<CitaMedica> listarCitas();
     
     List<CitaMedica> obtenerCitasDeHoy();
+    List<String> obtenerHorasDisponibles(int idMedico, LocalDate fecha);
 }

@@ -3,6 +3,7 @@ package com.mycompany.hospital.application.usecase;
 import com.mycompany.hospital.application.service.CitaMedicaService;
 import com.mycompany.hospital.domain.model.CitaMedica;
 import com.mycompany.hospital.domain.repository.CitaMedicaRepository;
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -47,6 +48,15 @@ public class CitaMedicaServiceImpl implements CitaMedicaService {
     @Override
     public List<CitaMedica> obtenerCitasDeHoy() {
         return repository.buscarCitasDeHoy();
+    }
+    
+    @Override
+    public List<String> obtenerHorasDisponibles(int idMedico, LocalDate fecha) {
+        List<String> horariosTotales = List.of("08:00", "09:00", "10:00", "11:00", "14:00", "15:00", "16:00");
+        List<String> ocupadas = repository.obtenerHorasOcupadas(idMedico, fecha);
+        return horariosTotales.stream()
+                .filter(h -> !ocupadas.contains(h))
+                .toList();
     }
 }
 

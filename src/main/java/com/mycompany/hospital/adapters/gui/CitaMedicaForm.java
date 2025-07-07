@@ -64,6 +64,7 @@ public class CitaMedicaForm extends javax.swing.JPanel {
         JButton btnEliminar = crearBoton("Eliminar");
         JButton btnCargar = crearBoton("Cargar");
         JButton btnHoy = crearBoton("Citas de hoy");
+        JButton btnDisponibilidad = crearBoton("Ver disponibilidad");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarCita());
@@ -71,6 +72,7 @@ public class CitaMedicaForm extends javax.swing.JPanel {
         btnEliminar.addActionListener(e -> eliminarCita());
         btnCargar.addActionListener(e -> cargarCitas());
         btnHoy.addActionListener(e -> cargarCitasDeHoy());
+        btnDisponibilidad.addActionListener(e -> mostrarDisponibilidad());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
@@ -78,6 +80,7 @@ public class CitaMedicaForm extends javax.swing.JPanel {
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
         buttonPanel.add(btnHoy);
+        buttonPanel.add(btnDisponibilidad);
         buttonPanel.add(btnVolver);
 
         tableModel = new DefaultTableModel(new String[]{"ID", "ID Paciente", "ID Médico", "Fecha", "Hora"}, 0);
@@ -201,6 +204,38 @@ public class CitaMedicaForm extends javax.swing.JPanel {
             });
         }
     }
+    
+    private void mostrarDisponibilidad() {
+        try {
+            String idStr = JOptionPane.showInputDialog(this, "Ingrese ID del médico:");
+            String fechaStr = JOptionPane.showInputDialog(this, "Ingrese fecha (yyyy-MM-dd):");
+
+            if (idStr != null && fechaStr != null) {
+                int idMedico = Integer.parseInt(idStr);
+                LocalDate fecha = LocalDate.parse(fechaStr);
+
+                List<String> disponibles = citaService.obtenerHorasDisponibles(idMedico, fecha);
+
+                if (disponibles.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "El médico no tiene disponibilidad ese día.");
+                } else {
+                    StringBuilder mensaje = new StringBuilder("Horas disponibles:\n");
+                    disponibles.forEach(h -> mensaje.append("• ").append(h).append("\n"));
+
+                    JTextArea area = new JTextArea(mensaje.toString());
+                    area.setEditable(false);
+                    area.setBackground(new Color(245, 245, 245));
+                    area.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+                    area.setMargin(new Insets(8, 8, 8, 8));
+
+                    JOptionPane.showMessageDialog(this, new JScrollPane(area), "Disponibilidad", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Entrada inválida o error interno.");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

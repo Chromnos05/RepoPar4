@@ -4,6 +4,7 @@ import com.mycompany.hospital.domain.model.CitaMedica;
 import com.mycompany.hospital.domain.repository.CitaMedicaRepository;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,4 +118,25 @@ public class CitaMedicaRepositoryPostgres implements CitaMedicaRepository {
         }
         return lista;
     }
+    
+    @Override
+    public List<String> obtenerHorasOcupadas(int idMedico, LocalDate fecha) {
+        List<String> horasOcupadas = new ArrayList<>();
+        String sql = """
+            SELECT hora FROM "citamedica"
+            WHERE id_medico = ? AND fecha = ?
+        """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idMedico);
+            stmt.setDate(2, Date.valueOf(fecha));
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                horasOcupadas.add(rs.getString("hora"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return horasOcupadas;
+    }
+
 }
