@@ -4,10 +4,13 @@
  */
 package com.mycompany.hospital.application.service;
 
+import com.mycompany.hospital.domain.model.Sustitucion;
+import java.util.List;
+
 /**
  *
  * @author Oscar M
  */
 public interface SustitucionService {
-    
+    List<Sustitucion> obtenerPorMedicoSustituto(int idMedico);
 }

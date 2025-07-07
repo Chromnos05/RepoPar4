@@ -1,7 +1,9 @@
 package com.mycompany.hospital.adapters.gui;
 
 import com.mycompany.hospital.application.service.MedicoService;
+import com.mycompany.hospital.application.service.SustitucionService;
 import com.mycompany.hospital.domain.model.Medico;
+import com.mycompany.hospital.domain.model.Sustitucion;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,13 +18,15 @@ public class MedicoForm extends javax.swing.JPanel {
     private final MedicoService medicoService;
     private final CardLayout cardLayout;
     private final JPanel contentPanel;
+    private final SustitucionService sustitucionService;
 
     private JTable table;
     private DefaultTableModel tableModel;
     private JTextField txtNombre, txtEspecialidad, txtIdConsultorio;
 
-    public MedicoForm(MedicoService medicoService, CardLayout cardLayout, JPanel contentPanel) {
+    public MedicoForm(MedicoService medicoService, SustitucionService sustitucionService, CardLayout cardLayout, JPanel contentPanel) {
         this.medicoService = medicoService;
+        this.sustitucionService = sustitucionService;
         this.cardLayout = cardLayout;
         this.contentPanel = contentPanel;
         initUI();
@@ -62,18 +66,21 @@ public class MedicoForm extends javax.swing.JPanel {
         JButton btnModificar = crearBoton("Modificar");
         JButton btnEliminar = crearBoton("Eliminar");
         JButton btnCargar = crearBoton("Cargar");
+        JButton btnSustituciones = crearBoton("Ver sustituciones");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarMedico());
         btnModificar.addActionListener(e -> modificarMedico());
         btnEliminar.addActionListener(e -> eliminarMedico());
         btnCargar.addActionListener(e -> cargarMedicos());
+        btnSustituciones.addActionListener(e -> mostrarSustituciones());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
         buttonPanel.add(btnModificar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
+        buttonPanel.add(btnSustituciones);
         buttonPanel.add(btnVolver);
 
         // Tabla
@@ -179,6 +186,43 @@ public class MedicoForm extends javax.swing.JPanel {
                 m.getEspecialidad(),
                 m.getIdConsultorio() != null ? m.getIdConsultorio() : "-"
             });
+        }
+    }
+    
+    private void mostrarSustituciones() {
+        String input = JOptionPane.showInputDialog(this, "Ingrese el ID del médico sustituto:");
+        if (input != null && !input.isEmpty()) {
+            try {
+                int idMedico = Integer.parseInt(input);
+                List<Sustitucion> lista = sustitucionService.obtenerPorMedicoSustituto(idMedico);
+
+                if (lista.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No se encontraron sustituciones para este médico.");
+                    return;
+                }
+
+                // Construir el mensaje
+                StringBuilder mensaje = new StringBuilder("Sustituciones realizadas:\n\n");
+                for (Sustitucion s : lista) {
+                    mensaje.append("• ID: ").append(s.getId())
+                           .append(" | Titular: ").append(s.getIdMedicoTitular())
+                           .append(" | Fecha: ").append(s.getFecha())
+                           .append("\n");
+                }
+
+                JTextArea area = new JTextArea(mensaje.toString());
+                area.setEditable(false);
+                area.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+                area.setBackground(new Color(245, 245, 245));
+
+                JScrollPane scroll = new JScrollPane(area);
+                scroll.setPreferredSize(new Dimension(400, 200));
+
+                JOptionPane.showMessageDialog(this, scroll, "Sustituciones del médico", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "ID inválido.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     @SuppressWarnings("unchecked")

@@ -80,6 +80,7 @@ com\mycompany\hospital\domain\repository\PrincipioActivoRepository.class
 com\mycompany\hospital\adapters\gui\MedicamentoContraindicacionForm.class
 com\mycompany\hospital\infrastructure\postgresql\RecetaRepositoryPostgres.class
 com\mycompany\hospital\application\service\DiagnosticoService.class
+com\mycompany\hospital\application\usecase\SustitucionServiceImpl.class
 com\mycompany\hospital\application\service\MedicamentoPrincipioService.class
 com\mycompany\hospital\domain\repository\MedicamentoRecetaRepository.class
 com\mycompany\hospital\application\service\ContraindicacionService.class

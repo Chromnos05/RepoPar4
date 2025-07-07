@@ -48,9 +48,13 @@ import com.mycompany.hospital.domain.repository.CitaMedicaRepository;
 import com.mycompany.hospital.infrastructure.postgresql.CitaMedicaRepositoryPostgres;
 
 import com.mycompany.hospital.application.service.DiagnosticoService;
+import com.mycompany.hospital.application.service.SustitucionService;
 import com.mycompany.hospital.application.usecase.DiagnosticoServiceImpl;
+import com.mycompany.hospital.application.usecase.SustitucionServiceImpl;
 import com.mycompany.hospital.domain.repository.DiagnosticoRepository;
+import com.mycompany.hospital.domain.repository.SustitucionRepository;
 import com.mycompany.hospital.infrastructure.postgresql.DiagnosticoRepositoryPostgres;
+import com.mycompany.hospital.infrastructure.postgresql.SustitucionRepositoryPostgres;
 
 
 import javax.swing.*;
@@ -70,6 +74,7 @@ public class Main extends javax.swing.JFrame {
     private final MedicoForm medicoForm;
     private final CitaMedicaForm citaForm;
     private final DiagnosticoForm diagnosticoForm;
+    
 
     public Main() {
         // --- Servicios ---
@@ -95,10 +100,13 @@ public class Main extends javax.swing.JFrame {
         enfermedadForm = new EnfermedadForm(enfermedadService, cardLayout, contentPanel);
         // --- Fin Servicio Enfermedad ---
         
+        SustitucionRepository sustitucionRepo = new SustitucionRepositoryPostgres();
+        SustitucionService sustitucionService = new SustitucionServiceImpl(sustitucionRepo);
+        
         MedicoRepository medicoRepo = new MedicoRepositoryPostgres();
         MedicoService medicoService = new MedicoServiceImpl(medicoRepo);
-        medicoForm = new MedicoForm(medicoService, cardLayout, contentPanel);
-
+        medicoForm = new MedicoForm(medicoService, sustitucionService, cardLayout, contentPanel);
+        
         CitaMedicaRepository citaRepo = new CitaMedicaRepositoryPostgres();
         CitaMedicaService citaService = new CitaMedicaServiceImpl(citaRepo);
         citaForm = new CitaMedicaForm(citaService, cardLayout, contentPanel);
