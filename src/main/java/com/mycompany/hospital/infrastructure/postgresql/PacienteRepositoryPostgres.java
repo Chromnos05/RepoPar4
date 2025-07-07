@@ -155,5 +155,39 @@ public class PacienteRepositoryPostgres implements PacienteRepository {
         }
         return lista;
     }
+    
+    @Override
+    public List<Paciente> buscarPacientesConEnfermedadCronica() {
+        List<Paciente> lista = new ArrayList<>();
+        String sql = """
+            SELECT DISTINCT p.*
+            FROM paciente p
+            JOIN citamedica c ON p.id_paciente = c.id_paciente
+            JOIN diagnostico d ON c.id_cita = d.id_cita
+            JOIN enfermedad e ON d.id_enfermedad = e.id_enfermedad
+            WHERE LOWER(e.nombre) LIKE '%diabetes%'
+               OR LOWER(e.nombre) LIKE '%hipertensión%'
+               OR LOWER(e.nombre) LIKE '%asma%'
+               OR LOWER(e.nombre) LIKE '%epoc%'
+        """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Paciente(
+                    rs.getInt("id_paciente"),
+                    rs.getString("nombre"),
+                    rs.getDate("fecha_nacimiento").toLocalDate(),
+                    rs.getString("direccion"),
+                    rs.getObject("id_medico_asignado") != null ? rs.getInt("id_medico_asignado") : null
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
 
 }

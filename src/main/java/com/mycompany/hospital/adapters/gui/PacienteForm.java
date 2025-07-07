@@ -69,6 +69,7 @@ public class PacienteForm extends javax.swing.JPanel {
         JButton btnCargar = crearBoton("Cargar");
         JButton btnBuscarPorMedico = crearBoton("Buscar por médico");
         JButton btnPorConsultorio = crearBoton("Buscar por consultorio");
+        JButton btnCronicos = crearBoton("Pacientes con enfermedad crónica");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarPaciente());
@@ -77,6 +78,7 @@ public class PacienteForm extends javax.swing.JPanel {
         btnCargar.addActionListener(e -> cargarPacientes());
         btnBuscarPorMedico.addActionListener(e -> buscarPacientesPorMedico());
         btnPorConsultorio.addActionListener(e -> buscarPacientesPorConsultorio());
+        btnCronicos.addActionListener(e -> mostrarPacientesConEnfermedadCronica());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
@@ -85,6 +87,7 @@ public class PacienteForm extends javax.swing.JPanel {
         buttonPanel.add(btnCargar);
         buttonPanel.add(btnBuscarPorMedico);
         buttonPanel.add(btnPorConsultorio);
+        buttonPanel.add(btnCronicos);
         buttonPanel.add(btnVolver);
 
         //Tabla
@@ -255,7 +258,35 @@ public class PacienteForm extends javax.swing.JPanel {
         }
     }
 
+    private void mostrarPacientesConEnfermedadCronica() {
+        List<Paciente> lista = pacienteService.obtenerPacientesConEnfermedadCronica();
 
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay pacientes con enfermedades crónicas registradas.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder("Pacientes con enfermedades crónicas:\n\n");
+        for (Paciente p : lista) {
+            sb.append("* ID: ").append(p.getId())
+              .append(" | Nombre: ").append(p.getNombre())
+              .append(" | Nacimiento: ").append(p.getFechaNacimiento())
+              .append(" | Dirección: ").append(p.getDireccion())
+              .append("\n");
+        }
+
+        JTextArea area = new JTextArea(sb.toString());
+        area.setEditable(false);
+        area.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        area.setBackground(new Color(245, 245, 245));
+        area.setMargin(new Insets(10, 10, 10, 10));
+        JScrollPane scroll = new JScrollPane(area);
+        scroll.setPreferredSize(new Dimension(550, 300));
+
+        JOptionPane.showMessageDialog(this, scroll, "Enfermedades Crónicas", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

@@ -52,4 +52,9 @@ public class PacienteServiceImpl implements PacienteService {
         return pacienteRepository.buscarPorIdConsultorio(idConsultorio);
     }
 
+    @Override
+    public List<Paciente> obtenerPacientesConEnfermedadCronica() {
+        return pacienteRepository.buscarPacientesConEnfermedadCronica();
+    }
+    
 }

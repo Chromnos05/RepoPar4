@@ -17,4 +17,6 @@ public interface PacienteRepository {
     
     List<Paciente> buscarPorIdMedico(int idMedico);
     List<Paciente> buscarPorIdConsultorio(int idConsultorio);
+    List<Paciente> buscarPacientesConEnfermedadCronica();
+
 }

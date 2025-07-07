@@ -17,4 +17,6 @@ public interface PacienteService {
     
     List<Paciente> obtenerPorIdMedico(int idMedico);
     List<Paciente> obtenerPorIdConsultorio(int idConsultorio);
+    List<Paciente> obtenerPacientesConEnfermedadCronica();
+
 }
