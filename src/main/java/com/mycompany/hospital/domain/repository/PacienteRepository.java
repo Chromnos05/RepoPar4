@@ -16,4 +16,5 @@ public interface PacienteRepository {
     void eliminar(int id);
     
     List<Paciente> buscarPorIdMedico(int idMedico);
+    List<Paciente> buscarPorIdConsultorio(int idConsultorio);
 }

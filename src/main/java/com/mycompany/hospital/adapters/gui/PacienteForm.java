@@ -68,20 +68,23 @@ public class PacienteForm extends javax.swing.JPanel {
         JButton btnEliminar = crearBoton("Eliminar");
         JButton btnCargar = crearBoton("Cargar");
         JButton btnBuscarPorMedico = crearBoton("Buscar por médico");
+        JButton btnPorConsultorio = crearBoton("Buscar por consultorio");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarPaciente());
         btnModificar.addActionListener(e -> modificarPaciente());
         btnEliminar.addActionListener(e -> eliminarPaciente());
         btnCargar.addActionListener(e -> cargarPacientes());
-        btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
         btnBuscarPorMedico.addActionListener(e -> buscarPacientesPorMedico());
+        btnPorConsultorio.addActionListener(e -> buscarPacientesPorConsultorio());
+        btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
         buttonPanel.add(btnModificar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
         buttonPanel.add(btnBuscarPorMedico);
+        buttonPanel.add(btnPorConsultorio);
         buttonPanel.add(btnVolver);
 
         //Tabla
@@ -229,6 +232,29 @@ public class PacienteForm extends javax.swing.JPanel {
             }
         }
     }
+    
+    private void buscarPacientesPorConsultorio() {
+        String input = JOptionPane.showInputDialog(this, "Ingrese el ID del consultorio:");
+        if (input != null && !input.isEmpty()) {
+            try {
+                int idConsultorio = Integer.parseInt(input);
+                List<Paciente> lista = pacienteService.obtenerPorIdConsultorio(idConsultorio);
+                tableModel.setRowCount(0);
+                for (Paciente p : lista) {
+                    tableModel.addRow(new Object[]{
+                        p.getId(),
+                        p.getNombre(),
+                        p.getFechaNacimiento(),
+                        p.getDireccion(),
+                        p.getIdMedicoAsignado() != null ? p.getIdMedicoAsignado() : "-"
+                    });
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "ID inválido.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

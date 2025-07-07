@@ -16,4 +16,5 @@ public interface PacienteService {
     void eliminarPaciente(int id);
     
     List<Paciente> obtenerPorIdMedico(int idMedico);
+    List<Paciente> obtenerPorIdConsultorio(int idConsultorio);
 }

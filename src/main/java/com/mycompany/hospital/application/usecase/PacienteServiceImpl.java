@@ -46,5 +46,10 @@ public class PacienteServiceImpl implements PacienteService {
     public List<Paciente> obtenerPorIdMedico(int idMedico) {
         return pacienteRepository.buscarPorIdMedico(idMedico);
     }
-}
+    
+    @Override
+    public List<Paciente> obtenerPorIdConsultorio(int idConsultorio) {
+        return pacienteRepository.buscarPorIdConsultorio(idConsultorio);
+    }
 
+}
