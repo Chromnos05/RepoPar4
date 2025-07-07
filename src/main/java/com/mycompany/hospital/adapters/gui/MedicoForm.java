@@ -67,6 +67,7 @@ public class MedicoForm extends javax.swing.JPanel {
         JButton btnEliminar = crearBoton("Eliminar");
         JButton btnCargar = crearBoton("Cargar");
         JButton btnSustituciones = crearBoton("Ver sustituciones");
+        JButton btnAtenciones = crearBoton("Pacientes por médico (último año)");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarMedico());
@@ -74,6 +75,7 @@ public class MedicoForm extends javax.swing.JPanel {
         btnEliminar.addActionListener(e -> eliminarMedico());
         btnCargar.addActionListener(e -> cargarMedicos());
         btnSustituciones.addActionListener(e -> mostrarSustituciones());
+        btnAtenciones.addActionListener(e -> mostrarPacientesPorMedicoUltimoAnio());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
@@ -81,6 +83,7 @@ public class MedicoForm extends javax.swing.JPanel {
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
         buttonPanel.add(btnSustituciones);
+        buttonPanel.add(btnAtenciones);
         buttonPanel.add(btnVolver);
 
         // Tabla
@@ -225,6 +228,33 @@ public class MedicoForm extends javax.swing.JPanel {
             }
         }
     }
+    
+    private void mostrarPacientesPorMedicoUltimoAnio() {
+        List<Object[]> resultados = medicoService.obtenerPacientesPorMedicoUltimoAnio();
+
+        if (resultados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron registros en el último año.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder(" Pacientes atendidos por médico (último año):\n\n");
+        for (Object[] fila : resultados) {
+            String nombre = (String) fila[0];
+            int total = (int) fila[1];
+            sb.append("• ").append(nombre).append(": ").append(total).append(" paciente(s)\n");
+        }
+
+        JTextArea area = new JTextArea(sb.toString());
+        area.setEditable(false);
+        area.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        area.setBackground(new Color(245, 245, 245));
+        area.setMargin(new Insets(10, 10, 10, 10));
+        JScrollPane scroll = new JScrollPane(area);
+        scroll.setPreferredSize(new Dimension(450, 300));
+
+        JOptionPane.showMessageDialog(this, scroll, "Pacientes atendidos por médico", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

@@ -18,4 +18,5 @@ public interface MedicoService {
     void eliminarMedico(int id);
     Medico obtenerMedicoPorId(int id);
     List<Medico> listarMedicos();
+    List<Object[]> obtenerPacientesPorMedicoUltimoAnio();   
 }

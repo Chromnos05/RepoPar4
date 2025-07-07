@@ -14,4 +14,6 @@ public interface MedicoRepository {
     List<Medico> listarTodos();
     void actualizar(Medico medico);
     void eliminar(int id);
+    
+    List<Object[]> obtenerPacientesPorMedicoUltimoAnio();
 }

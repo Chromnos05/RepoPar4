@@ -43,4 +43,10 @@ public class MedicoServiceImpl implements MedicoService {
     public List<Medico> listarMedicos() {
         return medicoRepository.listarTodos();
     }
+    
+    @Override
+    public List<Object[]> obtenerPacientesPorMedicoUltimoAnio() {
+        return medicoRepository.obtenerPacientesPorMedicoUltimoAnio();
+    }
+
 }

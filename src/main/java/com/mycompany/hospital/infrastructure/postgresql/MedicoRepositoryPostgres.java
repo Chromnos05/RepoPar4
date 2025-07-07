@@ -92,4 +92,30 @@ public class MedicoRepositoryPostgres implements MedicoRepository {
         }
         return lista;
     }
+    
+    @Override
+    public List<Object[]> obtenerPacientesPorMedicoUltimoAnio() {
+        List<Object[]> resultados = new ArrayList<>();
+        String sql = """
+            SELECT m.nombre, COUNT(c.id_paciente) AS total
+            FROM medico m
+            JOIN citamedica c ON m.id_medico = c.id_medico
+            WHERE c.fecha >= current_date - interval '1 year'
+            GROUP BY m.nombre
+            ORDER BY total DESC
+        """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String nombre = rs.getString("nombre");
+                int total = rs.getInt("total");
+                resultados.add(new Object[]{nombre, total});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultados;
+    }
 }
