@@ -1,6 +1,7 @@
 package com.mycompany.hospital.domain.repository;
 
 import com.mycompany.hospital.domain.model.Diagnostico;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -16,4 +17,5 @@ public interface DiagnosticoRepository {
     List<Diagnostico> listarTodos();
     
     List<Diagnostico> buscarPorIdPaciente(int idPaciente);
+    List<Diagnostico> buscarPorRangoDeFechas(LocalDate desde, LocalDate hasta);
 }

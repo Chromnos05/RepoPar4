@@ -4,6 +4,7 @@ import com.mycompany.hospital.domain.model.Diagnostico;
 import com.mycompany.hospital.domain.repository.DiagnosticoRepository;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -116,4 +117,31 @@ public class DiagnosticoRepositoryPostgres implements DiagnosticoRepository {
         }
         return lista;
     }
+    
+    @Override
+    public List<Diagnostico> buscarPorRangoDeFechas(LocalDate desde, LocalDate hasta) {
+        List<Diagnostico> lista = new ArrayList<>();
+        String sql = """
+            SELECT d.* FROM "diagnostico" d
+            INNER JOIN "citamedica" c ON d.id_cita = c.id_cita
+            WHERE c.fecha BETWEEN ? AND ?
+        """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, Date.valueOf(desde));
+            stmt.setDate(2, Date.valueOf(hasta));
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Diagnostico(
+                    rs.getInt("id_diagnostico"),
+                    rs.getInt("id_cita"),
+                    rs.getInt("id_enfermedad"),
+                    rs.getString("observaciones")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
 }

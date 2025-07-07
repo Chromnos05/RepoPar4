@@ -3,6 +3,7 @@ package com.mycompany.hospital.application.usecase;
 import com.mycompany.hospital.application.service.DiagnosticoService;
 import com.mycompany.hospital.domain.model.Diagnostico;
 import com.mycompany.hospital.domain.repository.DiagnosticoRepository;
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -47,6 +48,11 @@ public class DiagnosticoServiceImpl implements DiagnosticoService {
     @Override
     public List<Diagnostico> obtenerPorIdPaciente(int idPaciente) {
         return repository.buscarPorIdPaciente(idPaciente);
+    }
+    
+    @Override
+    public List<Diagnostico> obtenerPorRangoDeFechas(LocalDate desde, LocalDate hasta) {
+        return repository.buscarPorRangoDeFechas(desde, hasta);
     }
 }
 

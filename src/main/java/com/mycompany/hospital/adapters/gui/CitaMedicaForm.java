@@ -56,7 +56,7 @@ public class CitaMedicaForm extends javax.swing.JPanel {
         formPanel.add(new JLabel("Hora (HH:mm):"));
         formPanel.add(txtHora);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 6, 10, 10));
         buttonPanel.setOpaque(false);
 
         JButton btnGuardar = crearBoton("Guardar");

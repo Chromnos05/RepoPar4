@@ -1,6 +1,7 @@
 package com.mycompany.hospital.application.service;
 
 import com.mycompany.hospital.domain.model.Diagnostico;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -16,4 +17,6 @@ public interface DiagnosticoService {
     List<Diagnostico> listarDiagnosticos();
     
     List<Diagnostico> obtenerPorIdPaciente(int idPaciente);
+    List<Diagnostico> obtenerPorRangoDeFechas(LocalDate desde, LocalDate hasta);
+
 }

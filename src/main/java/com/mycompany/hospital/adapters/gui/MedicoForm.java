@@ -55,7 +55,7 @@ public class MedicoForm extends javax.swing.JPanel {
         formPanel.add(txtIdConsultorio);
 
         // Botones
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 6, 10, 10));
         buttonPanel.setOpaque(false);
 
         JButton btnGuardar = crearBoton("Guardar");

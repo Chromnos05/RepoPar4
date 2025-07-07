@@ -6,6 +6,7 @@ import com.mycompany.hospital.domain.model.Diagnostico;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -53,7 +54,7 @@ public class DiagnosticoForm extends javax.swing.JPanel {
         formPanel.add(new JLabel("Observaciones:"));
         formPanel.add(txtObservaciones);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 6, 10, 10)); // 3 columnas, filas dinámicas
         buttonPanel.setOpaque(false);
 
         JButton btnGuardar = crearBoton("Guardar");
@@ -61,6 +62,7 @@ public class DiagnosticoForm extends javax.swing.JPanel {
         JButton btnEliminar = crearBoton("Eliminar");
         JButton btnCargar = crearBoton("Cargar");
         JButton btnHistorialPaciente = crearBoton("Historial por paciente");
+        JButton btnDiagnosticosPorFecha = crearBoton("Diagnósticos por fecha");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarDiagnostico());
@@ -68,6 +70,7 @@ public class DiagnosticoForm extends javax.swing.JPanel {
         btnEliminar.addActionListener(e -> eliminarDiagnostico());
         btnCargar.addActionListener(e -> cargarDiagnosticos());
         btnHistorialPaciente.addActionListener(e -> buscarPorPaciente());
+        btnDiagnosticosPorFecha.addActionListener(e -> buscarDiagnosticosPorFecha());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
@@ -75,6 +78,7 @@ public class DiagnosticoForm extends javax.swing.JPanel {
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
         buttonPanel.add(btnHistorialPaciente);
+        buttonPanel.add(btnDiagnosticosPorFecha);
         buttonPanel.add(btnVolver);
 
         tableModel = new DefaultTableModel(new String[]{"ID", "ID Cita", "ID Enfermedad", "Observaciones"}, 0);
@@ -201,6 +205,32 @@ public class DiagnosticoForm extends javax.swing.JPanel {
             }
         }
     }
+    
+    private void buscarDiagnosticosPorFecha() {
+        try {
+            String desdeStr = JOptionPane.showInputDialog(this, "Desde (yyyy-MM-dd):");
+            String hastaStr = JOptionPane.showInputDialog(this, "Hasta (yyyy-MM-dd):");
+
+            if (desdeStr != null && hastaStr != null) {
+                LocalDate desde = LocalDate.parse(desdeStr);
+                LocalDate hasta = LocalDate.parse(hastaStr);
+
+                List<Diagnostico> lista = diagnosticoService.obtenerPorRangoDeFechas(desde, hasta);
+                tableModel.setRowCount(0);
+                for (Diagnostico d : lista) {
+                    tableModel.addRow(new Object[]{
+                        d.getId(),
+                        d.getIdCita(),
+                        d.getIdEnfermedad(),
+                        d.getObservaciones()
+                    });
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Fechas inválidas.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
