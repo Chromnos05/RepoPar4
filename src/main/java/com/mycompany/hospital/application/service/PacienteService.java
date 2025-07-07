@@ -14,4 +14,6 @@ public interface PacienteService {
     List<Paciente> listarPacientes();
     void actualizarPaciente(Paciente paciente);
     void eliminarPaciente(int id);
+    
+    List<Paciente> obtenerPorIdMedico(int idMedico);
 }

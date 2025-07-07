@@ -14,4 +14,6 @@ public interface PacienteRepository {
     List<Paciente> listarTodos();
     void actualizar(Paciente paciente);
     void eliminar(int id);
+    
+    List<Paciente> buscarPorIdMedico(int idMedico);
 }

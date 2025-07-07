@@ -101,4 +101,30 @@ public class PacienteRepositoryPostgres implements PacienteRepository {
             e.printStackTrace();
         }
     }
+    
+    @Override
+    public List<Paciente> buscarPorIdMedico(int idMedico) {
+        List<Paciente> lista = new ArrayList<>();
+        String sql = """
+            SELECT DISTINCT p.* FROM paciente p
+            INNER JOIN citamedica c ON p.id_paciente = c.id_paciente
+            WHERE c.id_medico = ?
+        """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idMedico);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Paciente(
+                    rs.getInt("id_paciente"),
+                    rs.getString("nombre"),
+                    rs.getDate("fecha_nacimiento").toLocalDate(),
+                    rs.getString("direccion"),
+                    rs.getObject("id_medico_asignado") != null ? rs.getInt("id_medico_asignado") : null
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }

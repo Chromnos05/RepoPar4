@@ -41,5 +41,10 @@ public class PacienteServiceImpl implements PacienteService {
     public void eliminarPaciente(int id) {
         pacienteRepository.eliminar(id);
     }
+    
+    @Override
+    public List<Paciente> obtenerPorIdMedico(int idMedico) {
+        return pacienteRepository.buscarPorIdMedico(idMedico);
+    }
 }
 
