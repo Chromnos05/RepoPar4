@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,5 +190,35 @@ public class PacienteRepositoryPostgres implements PacienteRepository {
         return lista;
     }
 
+    @Override
+    public List<Paciente> buscarPorConsultorioYFecha(int idConsultorio, LocalDate fecha) {
+        List<Paciente> lista = new ArrayList<>();
+        String sql = """
+            SELECT DISTINCT p.*
+            FROM paciente p
+            JOIN citamedica c ON p.id_paciente = c.id_paciente
+            JOIN medico m ON c.id_medico = m.id_medico
+            WHERE m.id_consultorio = ? AND c.fecha = ?
+        """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idConsultorio);
+            stmt.setDate(2, Date.valueOf(fecha));
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Paciente(
+                    rs.getInt("id_paciente"),
+                    rs.getString("nombre"),
+                    rs.getDate("fecha_nacimiento").toLocalDate(),
+                    rs.getString("direccion"),
+                    rs.getObject("id_medico_asignado") != null ? rs.getInt("id_medico_asignado") : null
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
 
 }

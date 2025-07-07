@@ -69,7 +69,8 @@ public class PacienteForm extends javax.swing.JPanel {
         JButton btnCargar = crearBoton("Cargar");
         JButton btnBuscarPorMedico = crearBoton("Buscar por médico");
         JButton btnPorConsultorio = crearBoton("Buscar por consultorio");
-        JButton btnCronicos = crearBoton("Pacientes con enfermedad crónica");
+        JButton btnCronicos = crearBoton("Pacientes enfermedad crónica");
+        JButton btnConsultorioFecha = crearBoton("Buscar por consultorio-fecha");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarPaciente());
@@ -79,6 +80,7 @@ public class PacienteForm extends javax.swing.JPanel {
         btnBuscarPorMedico.addActionListener(e -> buscarPacientesPorMedico());
         btnPorConsultorio.addActionListener(e -> buscarPacientesPorConsultorio());
         btnCronicos.addActionListener(e -> mostrarPacientesConEnfermedadCronica());
+        btnConsultorioFecha.addActionListener(e -> buscarPorConsultorioYFecha());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         buttonPanel.add(btnGuardar);
@@ -88,6 +90,7 @@ public class PacienteForm extends javax.swing.JPanel {
         buttonPanel.add(btnBuscarPorMedico);
         buttonPanel.add(btnPorConsultorio);
         buttonPanel.add(btnCronicos);
+        buttonPanel.add(btnConsultorioFecha);
         buttonPanel.add(btnVolver);
 
         //Tabla
@@ -284,6 +287,51 @@ public class PacienteForm extends javax.swing.JPanel {
         scroll.setPreferredSize(new Dimension(550, 300));
 
         JOptionPane.showMessageDialog(this, scroll, "Enfermedades Crónicas", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void buscarPorConsultorioYFecha() {
+        try {
+            String consultorioInput = JOptionPane.showInputDialog(this, "Ingrese el ID del consultorio:");
+            String fechaInput = JOptionPane.showInputDialog(this, "Ingrese la fecha (yyyy-MM-dd):");
+
+            if (consultorioInput != null && fechaInput != null) {
+                int idConsultorio = Integer.parseInt(consultorioInput);
+                LocalDate fecha = LocalDate.parse(fechaInput);
+
+                List<Paciente> lista = pacienteService.obtenerPorConsultorioYFecha(idConsultorio, fecha);
+
+                if (lista.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No se encontraron pacientes para esa fecha y consultorio.");
+                    return;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.append("--- Pacientes atendidos en Consultorio ")
+                  .append(idConsultorio)
+                  .append(" el ")
+                  .append(fecha)
+                  .append(" ---\n\n");
+
+                for (Paciente p : lista) {
+                    sb.append("ID: ").append(p.getId())
+                      .append(" | Nombre: ").append(p.getNombre())
+                      .append(" | Nacimiento: ").append(p.getFechaNacimiento())
+                      .append(" | Dirección: ").append(p.getDireccion())
+                      .append("\n");
+                }
+
+                JTextArea area = new JTextArea(sb.toString());
+                area.setEditable(false);
+                area.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+                area.setMargin(new Insets(10, 10, 10, 10));
+                JScrollPane scroll = new JScrollPane(area);
+                scroll.setPreferredSize(new Dimension(550, 300));
+
+                JOptionPane.showMessageDialog(this, scroll, "Resultado de búsqueda", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Datos inválidos o error interno.");
+        }
     }
 
     

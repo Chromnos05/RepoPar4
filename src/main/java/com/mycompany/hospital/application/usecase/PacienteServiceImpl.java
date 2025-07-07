@@ -3,6 +3,7 @@ package com.mycompany.hospital.application.usecase;
 import com.mycompany.hospital.application.service.PacienteService;
 import com.mycompany.hospital.domain.model.Paciente;
 import com.mycompany.hospital.domain.repository.PacienteRepository;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -57,4 +58,9 @@ public class PacienteServiceImpl implements PacienteService {
         return pacienteRepository.buscarPacientesConEnfermedadCronica();
     }
     
+    @Override
+    public List<Paciente> obtenerPorConsultorioYFecha(int idConsultorio, LocalDate fecha) {
+        return pacienteRepository.buscarPorConsultorioYFecha(idConsultorio, fecha);
+    }
+
 }
