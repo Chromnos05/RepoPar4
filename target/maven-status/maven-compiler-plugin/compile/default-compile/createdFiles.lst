@@ -22,6 +22,7 @@ com\mycompany\hospital\infrastructure\postgresql\DiagnosticoRepositoryPostgres.c
 com\mycompany\hospital\application\service\PrincipioActivoService.class
 com\mycompany\hospital\domain\repository\ConsultorioRepository.class
 com\mycompany\hospital\domain\model\Medico.class
+com\mycompany\hospital\adapters\gui\DialogoConsultasReceta.class
 com\mycompany\hospital\application\service\LaboratorioService.class
 com\mycompany\hospital\domain\repository\ContraindicacionRepository.class
 com\mycompany\hospital\adapters\gui\PacienteForm.class
@@ -64,10 +65,13 @@ com\mycompany\hospital\domain\repository\MedicamentoRepository.class
 com\mycompany\hospital\domain\model\MedicamentoContraindicacion.class
 com\mycompany\hospital\domain\repository\HorarioConsultaRepository.class
 com\mycompany\hospital\domain\repository\MedicamentoPrincipioRepository.class
+com\mycompany\hospital\adapters\gui\DialogoConsultasEnfermedad.class
 com\mycompany\hospital\adapters\gui\MedicamentoPrincipioForm.class
+com\mycompany\hospital\adapters\gui\DialogoConsultasMedicamento.class
 com\mycompany\hospital\adapters\gui\MedicamentoForm.class
 com\mycompany\hospital\adapters\gui\MedicoForm.class
 com\mycompany\hospital\domain\repository\EnfermedadRepository.class
+com\mycompany\hospital\adapters\gui\DialogoConsultasEmpleado.class
 com\mycompany\hospital\adapters\gui\InicioPanel.class
 com\mycompany\hospital\domain\repository\LaboratorioRepository.class
 com\mycompany\hospital\domain\model\Sintoma.class
