@@ -1,8 +1,11 @@
 package com.mycompany.hospital.application.usecase;
 
 import com.mycompany.hospital.application.service.EnfermedadService;
+import com.mycompany.hospital.domain.model.Diagnostico;
 import com.mycompany.hospital.domain.model.Enfermedad;
+import com.mycompany.hospital.domain.model.Sintoma;
 import com.mycompany.hospital.domain.repository.EnfermedadRepository;
+import java.time.LocalDate;
 import java.util.List;
 
 public class EnfermedadServiceImpl implements EnfermedadService {
@@ -36,5 +39,20 @@ public class EnfermedadServiceImpl implements EnfermedadService {
     @Override
     public void eliminarEnfermedad(int id) {
         enfermedadRepository.eliminar(id);
+    }
+    
+     @Override
+    public List<Sintoma> listarSintomasDeEnfermedad(int idEnfermedad) {
+        return enfermedadRepository.findSintomasByEnfermedadId(idEnfermedad);
+    }
+
+    @Override
+    public List<Diagnostico> listarDiagnosticosDeEnfermedad(int idEnfermedad) {
+        return enfermedadRepository.findDiagnosticosByEnfermedadId(idEnfermedad);
+    }
+    
+    @Override
+    public List<Enfermedad> listarDiagnosticadasEnPeriodo(LocalDate fechaInicio, LocalDate fechaFin) {
+        return enfermedadRepository.findDiagnosticadasEnPeriodo(fechaInicio, fechaFin);
     }
 }

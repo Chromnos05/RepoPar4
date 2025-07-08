@@ -4,12 +4,15 @@
  */
 package com.mycompany.hospital.adapters.gui;
 import com.mycompany.hospital.application.service.EnfermedadService;
+import com.mycompany.hospital.domain.model.Diagnostico;
 import com.mycompany.hospital.domain.model.Enfermedad;
+import com.mycompany.hospital.domain.model.Sintoma;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+import java.util.stream.Collectors;
 /**
  *
  * @author Oscar M
@@ -27,6 +30,7 @@ public class EnfermedadForm extends javax.swing.JPanel {
     private DefaultTableModel tableModel;
     private JTextField txtNombre;
     private JTextArea txtDescripcion;
+    private Enfermedad enfermedadSeleccionada;
 
     public EnfermedadForm(EnfermedadService enfermedadService, CardLayout cardLayout, JPanel contentPanel) {
         this.enfermedadService = enfermedadService;
@@ -69,13 +73,15 @@ public class EnfermedadForm extends javax.swing.JPanel {
         JButton btnModificar = crearBoton("Modificar");
         JButton btnEliminar = crearBoton("Eliminar");
         JButton btnCargar = crearBoton("Cargar");
+           JButton btnConsultas = crearBoton("Consultas...");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         buttonPanel.add(btnGuardar);
         buttonPanel.add(btnModificar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
-        buttonPanel.add(btnVolver);
+         buttonPanel.add(btnConsultas);// Añadir al panel
+        buttonPanel.add(btnVolver); 
 
         JPanel topPanel = new JPanel(new BorderLayout(0, 10));
         topPanel.setOpaque(false);
@@ -97,15 +103,17 @@ public class EnfermedadForm extends javax.swing.JPanel {
         btnEliminar.addActionListener(e -> eliminarEnfermedad());
         btnCargar.addActionListener(e -> cargarEnfermedades());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
+         btnConsultas.addActionListener(e -> abrirDialogoConsultas());
 
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
                 int fila = table.getSelectedRow();
                 int id = (int) tableModel.getValueAt(fila, 0);
-                Enfermedad enfermedad = enfermedadService.obtenerEnfermedadPorId(id);
-                if (enfermedad != null) {
-                    txtNombre.setText(enfermedad.getNombre());
-                    txtDescripcion.setText(enfermedad.getDescripcion());
+                // Guardamos el objeto completo al seleccionar
+                enfermedadSeleccionada = enfermedadService.obtenerEnfermedadPorId(id);
+                if (enfermedadSeleccionada != null) {
+                    txtNombre.setText(enfermedadSeleccionada.getNombre());
+                    txtDescripcion.setText(enfermedadSeleccionada.getDescripcion());
                 }
             }
         });
@@ -173,7 +181,16 @@ public class EnfermedadForm extends javax.swing.JPanel {
             tableModel.addRow(new Object[]{e.getId(), e.getNombre()});
         }
     }
-    
+    // --- MÉTODOS PARA MOSTRAR RESULTADOS DE CONSULTAS ---
+     private void abrirDialogoConsultas() {
+        if (enfermedadSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una enfermedad de la tabla primero.", "Acción Requerida", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        Frame owner = (Frame) SwingUtilities.getWindowAncestor(this);
+        DialogoConsultasEnfermedad dialogo = new DialogoConsultasEnfermedad(owner, enfermedadService, enfermedadSeleccionada);
+        dialogo.setVisible(true);
+    }
     private void limpiarCampos() {
         txtNombre.setText("");
         txtDescripcion.setText("");

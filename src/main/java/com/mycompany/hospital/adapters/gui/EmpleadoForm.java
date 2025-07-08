@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+import java.util.stream.Collectors;
 /**
  *
  * @author Oscar M
@@ -70,6 +71,8 @@ public class EmpleadoForm extends javax.swing.JPanel {
         // 🔹 Panel de formulario
         JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         formPanel.setOpaque(false);
+        
+        
 
         txtNombre = new JTextField();
         txtCargo = new JTextField();
@@ -87,6 +90,8 @@ public class EmpleadoForm extends javax.swing.JPanel {
         JButton btnModificar = crearBoton("Modificar");
         JButton btnEliminar = crearBoton("Eliminar");
         JButton btnCargar = crearBoton("Cargar");
+    JButton btnConsultas = crearBoton("Consultas...");
+ 
         JButton btnVolver = crearBoton("Volver al inicio");
 
         btnGuardar.addActionListener(e -> guardarEmpleado());
@@ -94,11 +99,13 @@ public class EmpleadoForm extends javax.swing.JPanel {
         btnEliminar.addActionListener(e -> eliminarEmpleado());
         btnCargar.addActionListener(e -> cargarEmpleados());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
+        btnConsultas.addActionListener(e -> abrirDialogoConsultas());
 
         buttonPanel.add(btnGuardar);
         buttonPanel.add(btnModificar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
+        buttonPanel.add(btnConsultas);
         buttonPanel.add(btnVolver);
 
         // 🔹 Panel superior que contiene título, formulario y botones
@@ -195,6 +202,11 @@ public class EmpleadoForm extends javax.swing.JPanel {
         }
     }
     
+     private void abrirDialogoConsultas() {
+        Frame owner = (Frame) SwingUtilities.getWindowAncestor(this);
+        DialogoConsultasEmpleado dialogo = new DialogoConsultasEmpleado(owner, empleadoService);
+        dialogo.setVisible(true);
+    }
     private void limpiarCampos() {
         txtNombre.setText("");
         txtCargo.setText("");

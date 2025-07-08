@@ -4,12 +4,12 @@
  */
 package com.mycompany.hospital.adapters.gui;
 import com.mycompany.hospital.application.service.MedicamentoService;
-import com.mycompany.hospital.domain.model.Medicamento;
-
+import com.mycompany.hospital.domain.model.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+import java.util.stream.Collectors;
 /**
  *
  * @author Oscar M
@@ -27,6 +27,7 @@ public class MedicamentoForm extends javax.swing.JPanel {
     private DefaultTableModel tableModel;
     private JTextField txtNombre, txtIdLaboratorio, txtUnidades;
     private JCheckBox chkNecesitaReceta;
+    private Medicamento medicamentoSeleccionado; // Guardar el objeto completo
 
     public MedicamentoForm(MedicamentoService medicamentoService, CardLayout cardLayout, JPanel contentPanel) {
         this.medicamentoService = medicamentoService;
@@ -68,13 +69,20 @@ public class MedicamentoForm extends javax.swing.JPanel {
         JButton btnModificar = crearBoton("Modificar");
         JButton btnEliminar = crearBoton("Eliminar");
         JButton btnCargar = crearBoton("Cargar");
+        
+        // NUEVO Y ÚNICO BOTÓN DE CONSULTAS
+        JButton btnConsultas = crearBoton("Consultas...");
+        
         JButton btnVolver = crearBoton("Volver al inicio");
 
         buttonPanel.add(btnGuardar);
         buttonPanel.add(btnModificar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
+        buttonPanel.add(btnConsultas); // Añadir el nuevo botón
         buttonPanel.add(btnVolver);
+        
+        
 
         JPanel topPanel = new JPanel(new BorderLayout(0,10));
         topPanel.setOpaque(false);
@@ -97,20 +105,22 @@ public class MedicamentoForm extends javax.swing.JPanel {
         btnCargar.addActionListener(e -> cargarMedicamentos());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
+        btnConsultas.addActionListener(e -> abrirDialogoConsultas());
+
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
                 int fila = table.getSelectedRow();
                 int medId = (int) tableModel.getValueAt(fila, 0);
-                // Buscamos el objeto completo para poblar el form
-                Medicamento med = medicamentoService.obtenerMedicamentoPorId(medId);
-                if (med != null) {
-                    txtNombre.setText(med.getNombre());
-                    txtUnidades.setText(String.valueOf(med.getUnidadesDisponibles()));
-                    txtIdLaboratorio.setText(med.getIdLaboratorio() != null ? String.valueOf(med.getIdLaboratorio()) : "");
-                    chkNecesitaReceta.setSelected(med.isNecesitaReceta());
+                medicamentoSeleccionado = medicamentoService.obtenerMedicamentoPorId(medId);
+                if (medicamentoSeleccionado != null) {
+                    txtNombre.setText(medicamentoSeleccionado.getNombre());
+                    txtUnidades.setText(String.valueOf(medicamentoSeleccionado.getUnidadesDisponibles()));
+                    txtIdLaboratorio.setText(medicamentoSeleccionado.getIdLaboratorio() != null ? String.valueOf(medicamentoSeleccionado.getIdLaboratorio()) : "");
+                    chkNecesitaReceta.setSelected(medicamentoSeleccionado.isNecesitaReceta());
                 }
             }
         });
+   
     }
     
     private JButton crearBoton(String texto) {
@@ -193,6 +203,26 @@ public class MedicamentoForm extends javax.swing.JPanel {
                 m.isNecesitaReceta() ? "Sí" : "No"
             });
         }
+    }
+    
+     private void abrirDialogoConsultas() {
+        Frame owner = (Frame) SwingUtilities.getWindowAncestor(this);
+        DialogoConsultasMedicamento dialogo = new DialogoConsultasMedicamento(owner, medicamentoService, medicamentoSeleccionado);
+        dialogo.setVisible(true);
+    }
+
+    // Método genérico para mostrar listas en un JOptionPane
+    private void mostrarListaEnDialog(List<String> items, String titulo) {
+        if (items.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron resultados.", titulo, JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        String mensaje = String.join("\n", items);
+        JTextArea textArea = new JTextArea(mensaje);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(350, 150));
+        JOptionPane.showMessageDialog(this, scrollPane, titulo + " de: " + medicamentoSeleccionado.getNombre(), JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void limpiarCampos() {

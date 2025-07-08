@@ -91,4 +91,25 @@ public class EmpleadoRepositoryPostgres implements EmpleadoRepository {
             rs.getString("cargo")
         );
     }
+    @Override
+    public List<Empleado> findConVacacionesUltimoAnio() {
+        List<Empleado> lista = new ArrayList<>();
+        // Esta consulta selecciona empleados únicos que tienen un registro de vacaciones
+        // cuya fecha de inicio es dentro del último año.
+        String sql = "SELECT DISTINCT e.* FROM Empleado e " +
+                     "JOIN Vacacion v ON e.id_empleado = v.id_empleado " +
+                     "WHERE v.fecha_inicio >= NOW() - INTERVAL '1 year'";
+        
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                lista.add(mapResultSetToEmpleado(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+   
 }

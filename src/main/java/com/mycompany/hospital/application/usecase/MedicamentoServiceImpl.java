@@ -1,7 +1,7 @@
 package com.mycompany.hospital.application.usecase;
 
 import com.mycompany.hospital.application.service.MedicamentoService;
-import com.mycompany.hospital.domain.model.Medicamento;
+import com.mycompany.hospital.domain.model.*;
 import com.mycompany.hospital.domain.repository.MedicamentoRepository;
 import java.util.List;
 
@@ -36,5 +36,39 @@ public class MedicamentoServiceImpl implements MedicamentoService {
     @Override
     public void eliminarMedicamento(int id) {
         medicamentoRepository.eliminar(id);
+    }
+    @Override
+    public List<Contraindicacion> listarContraindicaciones(int idMedicamento) {
+        return medicamentoRepository.findContraindicacionesById(idMedicamento);
+    }
+
+    @Override
+    public List<PrincipioActivo> listarPrincipiosActivos(int idMedicamento) {
+        return medicamentoRepository.findPrincipiosActivosById(idMedicamento);
+    }
+
+    @Override
+    public List<Receta> listarRecetasConMedicamento(int idMedicamento) {
+        return medicamentoRepository.findRecetasById(idMedicamento);
+    }
+    
+    @Override
+    public Laboratorio obtenerLaboratorio(int idLaboratorio) {
+        return medicamentoRepository.findLaboratorioById(idLaboratorio);
+    }
+    
+    @Override
+    public List<Medicamento> listarMedicamentosPorPaciente(int idPaciente) {
+        return medicamentoRepository.findByPacienteId(idPaciente);
+    }
+
+    @Override
+    public Laboratorio buscarLaboratorioPorNombre(String nombre) {
+        return medicamentoRepository.findLaboratorioByNombre(nombre);
+    }
+
+    @Override
+    public PrincipioActivo buscarPrincipioActivoPorNombre(String nombre) {
+        return medicamentoRepository.findPrincipioActivoByNombre(nombre);
     }
 }
