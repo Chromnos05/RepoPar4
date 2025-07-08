@@ -21,13 +21,14 @@ public class RecetaForm extends javax.swing.JPanel {
     /**
      * Creates new form RecetaForm
      */
-    private final RecetaService recetaService;
+   private final RecetaService recetaService;
     private final CardLayout cardLayout;
     private final JPanel contentPanel;
 
     private JTable table;
     private DefaultTableModel tableModel;
     private JTextField txtIdDiagnostico, txtFecha;
+    private Receta recetaSeleccionada;
 
     public RecetaForm(RecetaService recetaService, CardLayout cardLayout, JPanel contentPanel) {
         this.recetaService = recetaService;
@@ -43,31 +44,28 @@ public class RecetaForm extends javax.swing.JPanel {
 
         JLabel titulo = new JLabel("Gestión de Recetas");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        titulo.setForeground(new Color(44, 62, 80));
 
         JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        formPanel.setOpaque(false);
-
         txtIdDiagnostico = new JTextField();
         txtFecha = new JTextField();
-
         formPanel.add(new JLabel("ID Diagnóstico:"));
         formPanel.add(txtIdDiagnostico);
         formPanel.add(new JLabel("Fecha (YYYY-MM-DD):"));
         formPanel.add(txtFecha);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        buttonPanel.setOpaque(false);
         JButton btnGuardar = crearBoton("Guardar");
         JButton btnModificar = crearBoton("Modificar");
         JButton btnEliminar = crearBoton("Eliminar");
-        JButton btnCargar = crearBoton("Cargar");
+        JButton btnCargar = crearBoton("Cargar Todas");
+        JButton btnConsultas = crearBoton("Consultas...");
         JButton btnVolver = crearBoton("Volver al inicio");
 
         buttonPanel.add(btnGuardar);
         buttonPanel.add(btnModificar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnCargar);
+        buttonPanel.add(btnConsultas);
         buttonPanel.add(btnVolver);
 
         JPanel topPanel = new JPanel(new BorderLayout(0, 10));
@@ -84,22 +82,36 @@ public class RecetaForm extends javax.swing.JPanel {
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        // --- Action Listeners ---
         btnGuardar.addActionListener(e -> guardarReceta());
         btnModificar.addActionListener(e -> modificarReceta());
         btnEliminar.addActionListener(e -> eliminarReceta());
         btnCargar.addActionListener(e -> cargarRecetas());
+        btnConsultas.addActionListener(e -> abrirDialogoConsultas());
         btnVolver.addActionListener(e -> cardLayout.show(contentPanel, "inicio"));
 
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
                 int fila = table.getSelectedRow();
-                txtIdDiagnostico.setText(tableModel.getValueAt(fila, 1).toString());
-                txtFecha.setText(tableModel.getValueAt(fila, 2).toString());
+                int idReceta = (int)tableModel.getValueAt(fila, 0);
+                recetaSeleccionada = recetaService.obtenerRecetaPorId(idReceta);
+                if (recetaSeleccionada != null) {
+                    txtIdDiagnostico.setText(String.valueOf(recetaSeleccionada.getIdDiagnostico()));
+                    txtFecha.setText(recetaSeleccionada.getFecha().toString());
+                }
+            } else {
+                if (table.getSelectedRow() == -1) {
+                    recetaSeleccionada = null;
+                }
             }
         });
     }
 
+    private void abrirDialogoConsultas() {
+        Frame owner = (Frame) SwingUtilities.getWindowAncestor(this);
+        DialogoConsultasReceta dialogo = new DialogoConsultasReceta(owner, recetaService, recetaSeleccionada);
+        dialogo.setVisible(true);
+    }
+    
     private JButton crearBoton(String texto) {
         JButton btn = new JButton(texto);
         btn.setFocusPainted(false);
@@ -124,8 +136,6 @@ public class RecetaForm extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "ID de Diagnóstico debe ser un número.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
         } catch (DateTimeParseException ex) {
             JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto. Use YYYY-MM-DD.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -146,8 +156,6 @@ public class RecetaForm extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "ID de Diagnóstico debe ser un número.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
             } catch (DateTimeParseException ex) {
                 JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto. Use YYYY-MM-DD.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al modificar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Selecciona una receta para modificar.");
@@ -170,13 +178,14 @@ public class RecetaForm extends javax.swing.JPanel {
     }
 
     private void cargarRecetas() {
-        tableModel.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
         List<Receta> recetas = recetaService.listarRecetas();
         for (Receta r : recetas) {
-            tableModel.addRow(new Object[]{r.getId(), r.getIdDiagnostico(), r.getFecha().toString()});
+            model.addRow(new Object[]{r.getId(), r.getIdDiagnostico(), r.getFecha().toString()});
         }
     }
-
+    
     private void limpiarCampos() {
         txtIdDiagnostico.setText("");
         txtFecha.setText("");

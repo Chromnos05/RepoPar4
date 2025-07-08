@@ -40,4 +40,9 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     public void eliminarEmpleado(int id) {
         empleadoRepository.eliminar(id);
     }
+    
+    @Override
+    public List<Empleado> listarEmpleadosConVacaciones() {
+        return empleadoRepository.findConVacacionesUltimoAnio();
+    }
 }

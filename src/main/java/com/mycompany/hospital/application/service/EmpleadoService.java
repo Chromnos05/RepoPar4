@@ -17,4 +17,5 @@ public interface EmpleadoService {
     List<Empleado> listarEmpleados();
     void actualizarEmpleado(Empleado empleado);
     void eliminarEmpleado(int id);
+    List<Empleado> listarEmpleadosConVacaciones();
 }
