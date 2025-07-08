@@ -1,0 +1,13 @@
+# Maven
+/target/
+
+# NetBeans (configuración privada)
+nbproject/private/
+
+# Logs, compilados y binarios
+*.log
+*.class
+*.jar
+
+# Archivos de otros IDEs
+.idea/
