@@ -14,4 +14,5 @@ public interface EmpleadoRepository {
     List<Empleado> listarTodos();
     void actualizar(Empleado empleado);
     void eliminar(int id);
+    List<Empleado> findConVacacionesUltimoAnio(); 
 }

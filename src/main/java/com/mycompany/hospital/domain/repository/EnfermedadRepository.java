@@ -1,6 +1,9 @@
 package com.mycompany.hospital.domain.repository;
 
+import com.mycompany.hospital.domain.model.Diagnostico;
 import com.mycompany.hospital.domain.model.Enfermedad;
+import com.mycompany.hospital.domain.model.Sintoma;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -14,4 +17,7 @@ public interface EnfermedadRepository {
     List<Enfermedad> listarTodas();
     void actualizar(Enfermedad enfermedad);
     void eliminar(int id);
+    List<Sintoma> findSintomasByEnfermedadId(int idEnfermedad);
+    List<Diagnostico> findDiagnosticosByEnfermedadId(int idEnfermedad);
+    List<Enfermedad> findDiagnosticadasEnPeriodo(LocalDate fechaInicio, LocalDate fechaFin);
 }
