@@ -1,0 +1,1097 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.5
+-- Dumped by pg_dump version 17.5
+
+-- Started on 2025-07-08 19:04:10
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 229 (class 1259 OID 16710)
+-- Name: citamedica; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.citamedica (
+    id_cita integer NOT NULL,
+    id_paciente integer NOT NULL,
+    id_medico integer NOT NULL,
+    fecha date NOT NULL,
+    hora text NOT NULL
+);
+
+
+ALTER TABLE public.citamedica OWNER TO postgres;
+
+--
+-- TOC entry 239 (class 1259 OID 24581)
+-- Name: citamedica_id_cita_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.citamedica ALTER COLUMN id_cita ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.citamedica_id_cita_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 217 (class 1259 OID 16628)
+-- Name: consultorio; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.consultorio (
+    id_consultorio integer NOT NULL,
+    nombre text NOT NULL
+);
+
+
+ALTER TABLE public.consultorio OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 16656)
+-- Name: contraindicacion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.contraindicacion (
+    id_contraindicacion integer NOT NULL,
+    descripcion text NOT NULL
+);
+
+
+ALTER TABLE public.contraindicacion OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 16717)
+-- Name: diagnostico; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.diagnostico (
+    id_diagnostico integer NOT NULL,
+    id_cita integer NOT NULL,
+    id_enfermedad integer NOT NULL,
+    observaciones text
+);
+
+
+ALTER TABLE public.diagnostico OWNER TO postgres;
+
+--
+-- TOC entry 240 (class 1259 OID 24582)
+-- Name: diagnostico_id_diagnostico_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.diagnostico ALTER COLUMN id_diagnostico ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.diagnostico_id_diagnostico_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 223 (class 1259 OID 16670)
+-- Name: empleado; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.empleado (
+    id_empleado integer NOT NULL,
+    nombre text NOT NULL,
+    cargo text NOT NULL
+);
+
+
+ALTER TABLE public.empleado OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 16684)
+-- Name: enfermedad; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.enfermedad (
+    id_enfermedad integer NOT NULL,
+    nombre text NOT NULL,
+    descripcion text
+);
+
+
+ALTER TABLE public.enfermedad OWNER TO postgres;
+
+--
+-- TOC entry 236 (class 1259 OID 16753)
+-- Name: enfermedad_sintoma; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.enfermedad_sintoma (
+    id_enfermedad integer NOT NULL,
+    id_sintoma integer NOT NULL
+);
+
+
+ALTER TABLE public.enfermedad_sintoma OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 16691)
+-- Name: horarioconsulta; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.horarioconsulta (
+    id_horario integer NOT NULL,
+    id_medico integer NOT NULL,
+    dia text NOT NULL,
+    hora_inicio text NOT NULL,
+    hora_fin text NOT NULL
+);
+
+
+ALTER TABLE public.horarioconsulta OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 16635)
+-- Name: laboratorio; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.laboratorio (
+    id_laboratorio integer NOT NULL,
+    nombre text NOT NULL,
+    direccion text
+);
+
+
+ALTER TABLE public.laboratorio OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1259 OID 16729)
+-- Name: medicamento; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.medicamento (
+    id_medicamento integer NOT NULL,
+    nombre text NOT NULL,
+    id_laboratorio integer,
+    unidades_disponibles integer,
+    necesita_receta integer
+);
+
+
+ALTER TABLE public.medicamento OWNER TO postgres;
+
+--
+-- TOC entry 235 (class 1259 OID 16748)
+-- Name: medicamento_contraindicacion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.medicamento_contraindicacion (
+    id_medicamento integer NOT NULL,
+    id_contraindicacion integer NOT NULL
+);
+
+
+ALTER TABLE public.medicamento_contraindicacion OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1259 OID 16743)
+-- Name: medicamento_principio; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.medicamento_principio (
+    id_medicamento integer NOT NULL,
+    id_principio integer NOT NULL
+);
+
+
+ALTER TABLE public.medicamento_principio OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1259 OID 16736)
+-- Name: medicamento_receta; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.medicamento_receta (
+    id_receta integer NOT NULL,
+    id_medicamento integer NOT NULL,
+    cantidad integer NOT NULL,
+    dosis text
+);
+
+
+ALTER TABLE public.medicamento_receta OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 16663)
+-- Name: medico; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.medico (
+    id_medico integer NOT NULL,
+    nombre text NOT NULL,
+    especialidad text,
+    id_consultorio integer
+);
+
+
+ALTER TABLE public.medico OWNER TO postgres;
+
+--
+-- TOC entry 238 (class 1259 OID 24580)
+-- Name: medico_id_medico_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.medico ALTER COLUMN id_medico ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.medico_id_medico_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 224 (class 1259 OID 16677)
+-- Name: paciente; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.paciente (
+    id_paciente integer NOT NULL,
+    nombre text NOT NULL,
+    fecha_nacimiento date,
+    direccion text,
+    id_medico_asignado integer
+);
+
+
+ALTER TABLE public.paciente OWNER TO postgres;
+
+--
+-- TOC entry 237 (class 1259 OID 16864)
+-- Name: paciente_id_paciente_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.paciente ALTER COLUMN id_paciente ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.paciente_id_paciente_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 220 (class 1259 OID 16649)
+-- Name: principioactivo; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.principioactivo (
+    id_principio integer NOT NULL,
+    nombre text NOT NULL
+);
+
+
+ALTER TABLE public.principioactivo OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 16724)
+-- Name: receta; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.receta (
+    id_receta integer NOT NULL,
+    id_diagnostico integer NOT NULL,
+    fecha date NOT NULL
+);
+
+
+ALTER TABLE public.receta OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 16642)
+-- Name: sintoma; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sintoma (
+    id_sintoma integer NOT NULL,
+    descripcion text NOT NULL
+);
+
+
+ALTER TABLE public.sintoma OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 16705)
+-- Name: sustitucion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sustitucion (
+    id_sustitucion integer NOT NULL,
+    id_medico_titular integer NOT NULL,
+    id_medico_sustituto integer NOT NULL,
+    fecha date NOT NULL
+);
+
+
+ALTER TABLE public.sustitucion OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 16698)
+-- Name: vacacion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.vacacion (
+    id_vacacion integer NOT NULL,
+    id_medico integer,
+    id_empleado integer,
+    fecha_inicio date NOT NULL,
+    fecha_fin date NOT NULL,
+    tipo text
+);
+
+
+ALTER TABLE public.vacacion OWNER TO postgres;
+
+--
+-- TOC entry 5039 (class 0 OID 16710)
+-- Dependencies: 229
+-- Data for Name: citamedica; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.citamedica (id_cita, id_paciente, id_medico, fecha, hora) FROM stdin;
+1	1	1	2025-07-01	08:00
+2	2	2	2025-07-02	09:00
+3	3	3	2025-07-03	10:00
+4	4	4	2025-07-04	11:00
+5	5	5	2025-07-05	14:00
+7	3	8	2025-07-06	15:30
+\.
+
+
+--
+-- TOC entry 5027 (class 0 OID 16628)
+-- Dependencies: 217
+-- Data for Name: consultorio; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.consultorio (id_consultorio, nombre) FROM stdin;
+1	Consultorio Central
+2	Consultorio Norte
+3	Consultorio Sur
+4	Consultorio 1A
+5	Consultorio B2
+6	Consultorio 6
+7	Consultorio 7
+8	Consultorio 8
+9	Consultorio 9
+10	Consultorio 10
+11	Consultorio 11
+12	Consultorio 12
+13	Consultorio 13
+14	Consultorio 14
+15	Consultorio 15
+\.
+
+
+--
+-- TOC entry 5031 (class 0 OID 16656)
+-- Dependencies: 221
+-- Data for Name: contraindicacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.contraindicacion (id_contraindicacion, descripcion) FROM stdin;
+1	alergia a penicilina
+2	insuficiencia renal
+3	hipertension
+4	embarazo
+5	asma cronica
+\.
+
+
+--
+-- TOC entry 5040 (class 0 OID 16717)
+-- Dependencies: 230
+-- Data for Name: diagnostico; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.diagnostico (id_diagnostico, id_cita, id_enfermedad, observaciones) FROM stdin;
+1	1	1	sintomas leves
+2	2	2	requiere control
+3	3	3	medicacion necesaria
+4	4	4	tratamiento a largo plazo
+5	5	5	observacion
+\.
+
+
+--
+-- TOC entry 5033 (class 0 OID 16670)
+-- Dependencies: 223
+-- Data for Name: empleado; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.empleado (id_empleado, nombre, cargo) FROM stdin;
+1	Luis Romero	Administrador
+2	Marta Silva	Recepcionista
+3	Jorge Pena	Tecnico de sistemas
+4	Ana Morales	Limpieza
+5	David Ortega	Contador
+\.
+
+
+--
+-- TOC entry 5035 (class 0 OID 16684)
+-- Dependencies: 225
+-- Data for Name: enfermedad; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.enfermedad (id_enfermedad, nombre, descripcion) FROM stdin;
+1	Gripe	infeccion viral comun
+2	Diabetes	alteracion en los niveles de glucosa
+3	Hipertension	presion arterial elevada
+4	Asma	enfermedad respiratoria cronica
+5	Otitis	infeccion en el oido
+\.
+
+
+--
+-- TOC entry 5046 (class 0 OID 16753)
+-- Dependencies: 236
+-- Data for Name: enfermedad_sintoma; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.enfermedad_sintoma (id_enfermedad, id_sintoma) FROM stdin;
+1	1
+1	2
+2	5
+3	5
+4	3
+\.
+
+
+--
+-- TOC entry 5036 (class 0 OID 16691)
+-- Dependencies: 226
+-- Data for Name: horarioconsulta; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.horarioconsulta (id_horario, id_medico, dia, hora_inicio, hora_fin) FROM stdin;
+1	1	Lunes	08:00	10:00
+2	2	Martes	09:00	11:30
+3	3	Miercoles	10:00	12:00
+4	4	Jueves	11:00	13:00
+5	5	Viernes	14:00	16:00
+\.
+
+
+--
+-- TOC entry 5028 (class 0 OID 16635)
+-- Dependencies: 218
+-- Data for Name: laboratorio; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.laboratorio (id_laboratorio, nombre, direccion) FROM stdin;
+1	Labfarma	Calle 100 #10-20
+2	Medicorp	Carrera 45 #15-30
+3	Biogen	Avenida 68 #70-45
+4	Salufarma	Calle 26 #80-10
+5	Quimica Sur	Diagonal 55 #23-12
+\.
+
+
+--
+-- TOC entry 5042 (class 0 OID 16729)
+-- Dependencies: 232
+-- Data for Name: medicamento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.medicamento (id_medicamento, nombre, id_laboratorio, unidades_disponibles, necesita_receta) FROM stdin;
+1	Panadol	1	50	1
+2	Ibuprofeno MK	2	100	0
+3	Amoxilina 500mg	3	75	1
+4	Loratadina 10mg	4	60	0
+5	Salbutamol Inhalador	5	40	1
+\.
+
+
+--
+-- TOC entry 5045 (class 0 OID 16748)
+-- Dependencies: 235
+-- Data for Name: medicamento_contraindicacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.medicamento_contraindicacion (id_medicamento, id_contraindicacion) FROM stdin;
+1	2
+2	3
+3	1
+4	4
+5	5
+\.
+
+
+--
+-- TOC entry 5044 (class 0 OID 16743)
+-- Dependencies: 234
+-- Data for Name: medicamento_principio; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.medicamento_principio (id_medicamento, id_principio) FROM stdin;
+1	1
+2	2
+3	3
+4	4
+5	5
+\.
+
+
+--
+-- TOC entry 5043 (class 0 OID 16736)
+-- Dependencies: 233
+-- Data for Name: medicamento_receta; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.medicamento_receta (id_receta, id_medicamento, cantidad, dosis) FROM stdin;
+1	1	2	cada 8 horas
+2	2	1	cada 12 horas
+3	3	3	cada 6 horas
+4	4	1	una vez al dia
+5	5	2	dos inhalaciones cada 8h
+\.
+
+
+--
+-- TOC entry 5032 (class 0 OID 16663)
+-- Dependencies: 222
+-- Data for Name: medico; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.medico (id_medico, nombre, especialidad, id_consultorio) FROM stdin;
+1	Carlos Ruiz	Cardiologia	1
+2	Lucia Gomez	Pediatria	2
+3	Pedro Diaz	Neurologia	3
+4	Sandra Melo	Dermatologia	4
+5	Julio Torres	Medicina general	5
+8	Oscar Mercado	Medicina General	6
+\.
+
+
+--
+-- TOC entry 5034 (class 0 OID 16677)
+-- Dependencies: 224
+-- Data for Name: paciente; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.paciente (id_paciente, nombre, fecha_nacimiento, direccion, id_medico_asignado) FROM stdin;
+2	Diego Pineda	1988-07-23	Carrera 9 #17-33	2
+3	Laura Munoz	2001-12-01	Calle 45 #67-89	3
+4	Oscar Rojas	1979-11-15	Transversal 21 #3-05	4
+5	Andrea Perez	2005-05-20	Avenida 3 #22-40	5
+1	Camila Herrera	1995-04-12	Calle 5 #8-20	3
+8	Carlos Villanueva	1988-07-23	Carrera 9 #17-33	1
+\.
+
+
+--
+-- TOC entry 5030 (class 0 OID 16649)
+-- Dependencies: 220
+-- Data for Name: principioactivo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.principioactivo (id_principio, nombre) FROM stdin;
+1	Paracetamol
+2	Ibuprofeno
+3	Amoxicilina
+4	Loratadina
+5	Salbutamol
+\.
+
+
+--
+-- TOC entry 5041 (class 0 OID 16724)
+-- Dependencies: 231
+-- Data for Name: receta; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.receta (id_receta, id_diagnostico, fecha) FROM stdin;
+1	1	2025-07-01
+2	2	2025-07-02
+3	3	2025-07-03
+4	4	2025-07-04
+5	5	2025-07-05
+\.
+
+
+--
+-- TOC entry 5029 (class 0 OID 16642)
+-- Dependencies: 219
+-- Data for Name: sintoma; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.sintoma (id_sintoma, descripcion) FROM stdin;
+1	dolor de cabeza
+2	fiebre
+3	tos seca
+4	dolor abdominal
+5	mareo
+\.
+
+
+--
+-- TOC entry 5038 (class 0 OID 16705)
+-- Dependencies: 228
+-- Data for Name: sustitucion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.sustitucion (id_sustitucion, id_medico_titular, id_medico_sustituto, fecha) FROM stdin;
+1	1	2	2025-07-01
+2	2	3	2025-07-02
+3	3	4	2025-07-03
+4	4	5	2025-07-04
+5	5	1	2025-07-05
+\.
+
+
+--
+-- TOC entry 5037 (class 0 OID 16698)
+-- Dependencies: 227
+-- Data for Name: vacacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.vacacion (id_vacacion, id_medico, id_empleado, fecha_inicio, fecha_fin, tipo) FROM stdin;
+1	1	1	2025-07-01	2025-07-10	licencia
+2	2	2	2025-07-05	2025-07-15	descanso
+3	3	3	2025-07-10	2025-07-20	enfermedad
+4	4	4	2025-07-15	2025-07-25	vacaciones
+5	5	5	2025-07-20	2025-07-30	permiso
+\.
+
+
+--
+-- TOC entry 5056 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: citamedica_id_cita_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.citamedica_id_cita_seq', 7, true);
+
+
+--
+-- TOC entry 5057 (class 0 OID 0)
+-- Dependencies: 240
+-- Name: diagnostico_id_diagnostico_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.diagnostico_id_diagnostico_seq', 6, true);
+
+
+--
+-- TOC entry 5058 (class 0 OID 0)
+-- Dependencies: 238
+-- Name: medico_id_medico_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.medico_id_medico_seq', 8, true);
+
+
+--
+-- TOC entry 5059 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: paciente_id_paciente_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.paciente_id_paciente_seq', 8, true);
+
+
+--
+-- TOC entry 4846 (class 2606 OID 16716)
+-- Name: citamedica citamedica_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.citamedica
+    ADD CONSTRAINT citamedica_pkey PRIMARY KEY (id_cita);
+
+
+--
+-- TOC entry 4822 (class 2606 OID 16634)
+-- Name: consultorio consultorio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.consultorio
+    ADD CONSTRAINT consultorio_pkey PRIMARY KEY (id_consultorio);
+
+
+--
+-- TOC entry 4830 (class 2606 OID 16662)
+-- Name: contraindicacion contraindicacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contraindicacion
+    ADD CONSTRAINT contraindicacion_pkey PRIMARY KEY (id_contraindicacion);
+
+
+--
+-- TOC entry 4848 (class 2606 OID 16723)
+-- Name: diagnostico diagnostico_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.diagnostico
+    ADD CONSTRAINT diagnostico_pkey PRIMARY KEY (id_diagnostico);
+
+
+--
+-- TOC entry 4834 (class 2606 OID 16676)
+-- Name: empleado empleado_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empleado
+    ADD CONSTRAINT empleado_pkey PRIMARY KEY (id_empleado);
+
+
+--
+-- TOC entry 4838 (class 2606 OID 16690)
+-- Name: enfermedad enfermedad_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.enfermedad
+    ADD CONSTRAINT enfermedad_pkey PRIMARY KEY (id_enfermedad);
+
+
+--
+-- TOC entry 4860 (class 2606 OID 16757)
+-- Name: enfermedad_sintoma enfermedad_sintoma_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.enfermedad_sintoma
+    ADD CONSTRAINT enfermedad_sintoma_pkey PRIMARY KEY (id_enfermedad, id_sintoma);
+
+
+--
+-- TOC entry 4840 (class 2606 OID 16697)
+-- Name: horarioconsulta horarioconsulta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.horarioconsulta
+    ADD CONSTRAINT horarioconsulta_pkey PRIMARY KEY (id_horario);
+
+
+--
+-- TOC entry 4824 (class 2606 OID 16641)
+-- Name: laboratorio laboratorio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.laboratorio
+    ADD CONSTRAINT laboratorio_pkey PRIMARY KEY (id_laboratorio);
+
+
+--
+-- TOC entry 4858 (class 2606 OID 16752)
+-- Name: medicamento_contraindicacion medicamento_contraindicacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento_contraindicacion
+    ADD CONSTRAINT medicamento_contraindicacion_pkey PRIMARY KEY (id_medicamento, id_contraindicacion);
+
+
+--
+-- TOC entry 4852 (class 2606 OID 16735)
+-- Name: medicamento medicamento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento
+    ADD CONSTRAINT medicamento_pkey PRIMARY KEY (id_medicamento);
+
+
+--
+-- TOC entry 4856 (class 2606 OID 16747)
+-- Name: medicamento_principio medicamento_principio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento_principio
+    ADD CONSTRAINT medicamento_principio_pkey PRIMARY KEY (id_medicamento, id_principio);
+
+
+--
+-- TOC entry 4854 (class 2606 OID 16742)
+-- Name: medicamento_receta medicamento_receta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento_receta
+    ADD CONSTRAINT medicamento_receta_pkey PRIMARY KEY (id_receta, id_medicamento);
+
+
+--
+-- TOC entry 4832 (class 2606 OID 16669)
+-- Name: medico medico_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medico
+    ADD CONSTRAINT medico_pkey PRIMARY KEY (id_medico);
+
+
+--
+-- TOC entry 4836 (class 2606 OID 16683)
+-- Name: paciente paciente_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.paciente
+    ADD CONSTRAINT paciente_pkey PRIMARY KEY (id_paciente);
+
+
+--
+-- TOC entry 4828 (class 2606 OID 16655)
+-- Name: principioactivo principioactivo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.principioactivo
+    ADD CONSTRAINT principioactivo_pkey PRIMARY KEY (id_principio);
+
+
+--
+-- TOC entry 4850 (class 2606 OID 16728)
+-- Name: receta receta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.receta
+    ADD CONSTRAINT receta_pkey PRIMARY KEY (id_receta);
+
+
+--
+-- TOC entry 4826 (class 2606 OID 16648)
+-- Name: sintoma sintoma_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sintoma
+    ADD CONSTRAINT sintoma_pkey PRIMARY KEY (id_sintoma);
+
+
+--
+-- TOC entry 4844 (class 2606 OID 16709)
+-- Name: sustitucion sustitucion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sustitucion
+    ADD CONSTRAINT sustitucion_pkey PRIMARY KEY (id_sustitucion);
+
+
+--
+-- TOC entry 4842 (class 2606 OID 16704)
+-- Name: vacacion vacacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vacacion
+    ADD CONSTRAINT vacacion_pkey PRIMARY KEY (id_vacacion);
+
+
+--
+-- TOC entry 4868 (class 2606 OID 16793)
+-- Name: citamedica fk_citamedica_id_medico; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.citamedica
+    ADD CONSTRAINT fk_citamedica_id_medico FOREIGN KEY (id_medico) REFERENCES public.medico(id_medico) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 4869 (class 2606 OID 16798)
+-- Name: citamedica fk_citamedica_id_paciente; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.citamedica
+    ADD CONSTRAINT fk_citamedica_id_paciente FOREIGN KEY (id_paciente) REFERENCES public.paciente(id_paciente) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 4870 (class 2606 OID 16808)
+-- Name: diagnostico fk_diagnostico_id_cita; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.diagnostico
+    ADD CONSTRAINT fk_diagnostico_id_cita FOREIGN KEY (id_cita) REFERENCES public.citamedica(id_cita) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4871 (class 2606 OID 16803)
+-- Name: diagnostico fk_diagnostico_id_enfermedad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.diagnostico
+    ADD CONSTRAINT fk_diagnostico_id_enfermedad FOREIGN KEY (id_enfermedad) REFERENCES public.enfermedad(id_enfermedad) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4880 (class 2606 OID 16858)
+-- Name: enfermedad_sintoma fk_enfermedad_sintoma_id_enfermedad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.enfermedad_sintoma
+    ADD CONSTRAINT fk_enfermedad_sintoma_id_enfermedad FOREIGN KEY (id_enfermedad) REFERENCES public.enfermedad(id_enfermedad);
+
+
+--
+-- TOC entry 4881 (class 2606 OID 16853)
+-- Name: enfermedad_sintoma fk_enfermedad_sintoma_id_sintoma; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.enfermedad_sintoma
+    ADD CONSTRAINT fk_enfermedad_sintoma_id_sintoma FOREIGN KEY (id_sintoma) REFERENCES public.sintoma(id_sintoma);
+
+
+--
+-- TOC entry 4863 (class 2606 OID 16768)
+-- Name: horarioconsulta fk_horarioconsulta_id_medico; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.horarioconsulta
+    ADD CONSTRAINT fk_horarioconsulta_id_medico FOREIGN KEY (id_medico) REFERENCES public.medico(id_medico) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4878 (class 2606 OID 16843)
+-- Name: medicamento_contraindicacion fk_medicamento_contraindicacion_id_contraindicacion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento_contraindicacion
+    ADD CONSTRAINT fk_medicamento_contraindicacion_id_contraindicacion FOREIGN KEY (id_contraindicacion) REFERENCES public.contraindicacion(id_contraindicacion);
+
+
+--
+-- TOC entry 4879 (class 2606 OID 16848)
+-- Name: medicamento_contraindicacion fk_medicamento_contraindicacion_id_medicamento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento_contraindicacion
+    ADD CONSTRAINT fk_medicamento_contraindicacion_id_medicamento FOREIGN KEY (id_medicamento) REFERENCES public.medicamento(id_medicamento);
+
+
+--
+-- TOC entry 4873 (class 2606 OID 16818)
+-- Name: medicamento fk_medicamento_id_laboratorio; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento
+    ADD CONSTRAINT fk_medicamento_id_laboratorio FOREIGN KEY (id_laboratorio) REFERENCES public.laboratorio(id_laboratorio) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 4876 (class 2606 OID 16838)
+-- Name: medicamento_principio fk_medicamento_principio_id_medicamento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento_principio
+    ADD CONSTRAINT fk_medicamento_principio_id_medicamento FOREIGN KEY (id_medicamento) REFERENCES public.medicamento(id_medicamento);
+
+
+--
+-- TOC entry 4877 (class 2606 OID 16833)
+-- Name: medicamento_principio fk_medicamento_principio_id_principio; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento_principio
+    ADD CONSTRAINT fk_medicamento_principio_id_principio FOREIGN KEY (id_principio) REFERENCES public.principioactivo(id_principio);
+
+
+--
+-- TOC entry 4874 (class 2606 OID 16823)
+-- Name: medicamento_receta fk_medicamento_receta_id_medicamento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento_receta
+    ADD CONSTRAINT fk_medicamento_receta_id_medicamento FOREIGN KEY (id_medicamento) REFERENCES public.medicamento(id_medicamento) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4875 (class 2606 OID 16828)
+-- Name: medicamento_receta fk_medicamento_receta_id_receta; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medicamento_receta
+    ADD CONSTRAINT fk_medicamento_receta_id_receta FOREIGN KEY (id_receta) REFERENCES public.receta(id_receta) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4861 (class 2606 OID 16758)
+-- Name: medico fk_medico_id_consultorio; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medico
+    ADD CONSTRAINT fk_medico_id_consultorio FOREIGN KEY (id_consultorio) REFERENCES public.consultorio(id_consultorio) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- TOC entry 4862 (class 2606 OID 16763)
+-- Name: paciente fk_paciente_id_medico_asignado; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.paciente
+    ADD CONSTRAINT fk_paciente_id_medico_asignado FOREIGN KEY (id_medico_asignado) REFERENCES public.medico(id_medico) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- TOC entry 4872 (class 2606 OID 16813)
+-- Name: receta fk_receta_id_diagnostico; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.receta
+    ADD CONSTRAINT fk_receta_id_diagnostico FOREIGN KEY (id_diagnostico) REFERENCES public.diagnostico(id_diagnostico) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4866 (class 2606 OID 16783)
+-- Name: sustitucion fk_sustitucion_id_medico_sustituto; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sustitucion
+    ADD CONSTRAINT fk_sustitucion_id_medico_sustituto FOREIGN KEY (id_medico_sustituto) REFERENCES public.medico(id_medico) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4867 (class 2606 OID 16788)
+-- Name: sustitucion fk_sustitucion_id_medico_titular; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sustitucion
+    ADD CONSTRAINT fk_sustitucion_id_medico_titular FOREIGN KEY (id_medico_titular) REFERENCES public.medico(id_medico) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4864 (class 2606 OID 16773)
+-- Name: vacacion fk_vacacion_id_empleado; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vacacion
+    ADD CONSTRAINT fk_vacacion_id_empleado FOREIGN KEY (id_empleado) REFERENCES public.empleado(id_empleado) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- TOC entry 4865 (class 2606 OID 16778)
+-- Name: vacacion fk_vacacion_id_medico; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vacacion
+    ADD CONSTRAINT fk_vacacion_id_medico FOREIGN KEY (id_medico) REFERENCES public.medico(id_medico) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+-- Completed on 2025-07-08 19:04:10
+
+--
+-- PostgreSQL database dump complete
+--
+
